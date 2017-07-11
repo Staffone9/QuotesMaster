@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "561235653095",
+    "firebase_url": "https://quotes-563d2.firebaseio.com",
+    "project_id": "quotes-563d2",
+    "storage_bucket": "quotes-563d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561235653095:android:a863b92c2d34f21b",
+        "android_client_info": {
+          "package_name": "com.example.staffonechristian.quotesmaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561235653095-o824alftbrnge2absjv0b7iajvsc4puv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA77QOmyIrSX2pDe-Q22QSpGGHLCvjlq2M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
