@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QuotesMaster</string>
+    <string name="copy_text">Copy Quote</string>
+    <string name="share_text">Share Quote</string>
+    <string name="like_text">Like</string>
+    <string name="backdrop_title">MAGICAL QUOTES</string>
+    <string name="backdrop_subtitle">Make your life worth it</string>
+
 </resources>
