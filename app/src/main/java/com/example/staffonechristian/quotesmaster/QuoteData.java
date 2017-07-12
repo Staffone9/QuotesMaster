@@ -10,6 +10,16 @@ public class QuoteData {
     private String author;
     private String category;
 
+    public QuoteData(){
+
+    }
+
+    public QuoteData(String mQuoteText, String mAuthor, String mCategory){
+        this.quote = mQuoteText;
+        this.author = mAuthor;
+        this.category = mCategory;
+    }
+
     public String getQuote() {
         return quote;
     }
