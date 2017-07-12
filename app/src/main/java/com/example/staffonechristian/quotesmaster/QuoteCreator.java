@@ -1,6 +1,8 @@
 package com.example.staffonechristian.quotesmaster;
 
+import android.content.Intent;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,8 +46,36 @@ public class QuoteCreator extends AppCompatActivity {
                             String quote = individual.child("quote").getValue(String.class);
                             if(quote.equals(quoteText.getText().toString()))
                             {
+                                Snackbar snackbar = Snackbar
+                                        .make(findViewById(android.R.id.content), "Already exists", Snackbar.LENGTH_LONG);
+
+                                snackbar.show();
                                 flag = false;
                                 break;
+                            }else{
+
+                                String[] splitOne = quote.split("\\s+");
+                                String[] splitTwo = quoteText.getText().toString().split("\\s+");
+                                int counter=0;
+                                for(int i=0;i<10 && i<splitOne.length && i<splitTwo.length;i++)
+                                {
+                                    System.out.println("----->splitOne[i]="+splitOne[i]+"------->splitTwo[i]"+splitTwo[i]);
+                                    if(splitOne[i].equals(splitTwo[i]))
+                                    {
+                                        counter++;
+                                    }
+                                    if(counter>=6)
+                                    {
+                                        Snackbar snackbar = Snackbar
+                                                .make(findViewById(android.R.id.content), "Already exists", Snackbar.LENGTH_LONG);
+
+                                        snackbar.show();
+                                        flag = false;
+                                        break;
+                                    }
+                                }
+
+
                             }
 
 
@@ -63,6 +93,11 @@ public class QuoteCreator extends AppCompatActivity {
                 if(flag)
                 {
 
+
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content), "Quote added Successfully", Snackbar.LENGTH_LONG);
+
+                    snackbar.show();
                     DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
                     DatabaseReference drWrite = referenceWrite.child("Quote").push();
                     QuoteData quoteData = new QuoteData();
