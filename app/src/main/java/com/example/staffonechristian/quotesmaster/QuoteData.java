@@ -1,5 +1,7 @@
 package com.example.staffonechristian.quotesmaster;
 
+import java.util.ArrayList;
+
 /**
  * Created by staffonechristian on 2017-07-11.
  */
@@ -10,14 +12,25 @@ public class QuoteData {
     private String author;
     private String category;
 
+    static ArrayList<String> listOfCategory = new ArrayList<String>();
+
+
+    public static ArrayList<String> getListOfCategory() {
+        return listOfCategory;
+    }
+
+    public static void setListOfCategory(ArrayList<String> listOfCategoryOne) {
+        listOfCategory = listOfCategoryOne;
+    }
+
     public QuoteData(){
 
     }
 
-    public QuoteData(String mQuoteText, String mAuthor, String mCategory){
+    public QuoteData(String mQuoteText, String mAuthor){
         this.quote = mQuoteText;
         this.author = mAuthor;
-        this.category = mCategory;
+
     }
 
     public String getQuote() {

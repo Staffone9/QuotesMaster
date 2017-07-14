@@ -21,14 +21,15 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private QuotesAdapter adapter;
     private List<QuoteData> quotesList;
+    QuoteData mData;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(getApplicationContext(),Category.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(),Category.class);
+//        startActivity(intent);
 
         //Code by Anjali
         quotesList = new ArrayList<>();
@@ -43,60 +44,50 @@ public class MainActivity extends AppCompatActivity {
 
         prepareQuotes();
 
-        //Code by Staffone
-        DatabaseReference quoteReference = reference.child("Quote");
-        quoteReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot individual : dataSnapshot.getChildren()) {
-                    String Quote = individual.child("quote").getValue(String.class);
-                    Toast.makeText(getApplicationContext(),"Quote"+Quote,Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void prepareQuotes(){
-        QuoteData mData = new QuoteData("“The Way To Get Started Is To Quit Talking And Begin Doing.”",
-                "-Walt Disney",
-                "Motivational");
-        quotesList.add(mData);
+        getList();
+        for(int i=0;i<6;i++)
+        {
 
-        mData = new QuoteData("“The Pessimist Sees Difficulty In Every Opportunity. The Optimist Sees The Opportunity In Every Difficulty.”",
-                "-Winston Churchill",
-                "Motivational");
-        quotesList.add(mData);
+            DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(i));
 
-        mData = new QuoteData("“Don’t Let Yesterday Take Up Too Much Of Today.”",
-                "-Will Rogers",
-                "Motivational");
-        quotesList.add(mData);
+            quoteReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot individual : dataSnapshot.getChildren()) {
+                        String quote = individual.child("quote").getValue(String.class);
+                        String author = individual.child("author").getValue(String.class);
+                        mData = new QuoteData(quote, author);
+                        quotesList.add(mData);
 
-        mData = new QuoteData("“You Learn More From Failure Than From Success. Don’t Let It Stop You. Failure Builds Character",
-                "-Anonymous",
-                "Motivational");
-        quotesList.add(mData);
+                       // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
+                    }
+                    adapter.notifyDataSetChanged();
+                }
 
-        mData = new QuoteData("“It’s Not Whether You Get Knocked Down, It’s Whether You Get Up.”",
-                "-Vince Lombardi",
-                "Motivational");
-        quotesList.add(mData);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-        mData = new QuoteData("“If You Are Working On Something That You Really Care About, You Don’t Have To Be Pushed. The Vision Pulls You.”",
-                "-Steve Jobs",
-                "Motivational");
-        quotesList.add(mData);
+                }
+            });
+        }
 
-        mData = new QuoteData("“People Who Are Crazy Enough To Think They Can Change The World, Are The Ones Who Do.”",
-                "-Rob Siltanen",
-                "Motivational");
-        quotesList.add(mData);
 
-        adapter.notifyDataSetChanged();
+
+    }
+
+
+    public void getList() {
+        ArrayList<String> listOfCategory = new ArrayList<String>();
+        listOfCategory.add("Motivational");
+        listOfCategory.add("Life");
+        listOfCategory.add("Inspirational");
+        listOfCategory.add("Friendship");
+        listOfCategory.add("Love");
+        listOfCategory.add("Positive");
+        mData.setListOfCategory(listOfCategory);
     }
 }
