@@ -28,6 +28,7 @@ public class QuoteCreator extends AppCompatActivity implements  AdapterView.OnIt
     Button submitButton;
     boolean flag=false;
     String categoriesString="unknown";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,29 +102,20 @@ public class QuoteCreator extends AppCompatActivity implements  AdapterView.OnIt
                                         break;
                                     }
                                 }
-
-
                             }
-
-
                         }
-
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
 
 
                 if(flag)
                 {
-
-
                     Snackbar snackbar = Snackbar
                             .make(findViewById(android.R.id.content), "Quote added Successfully", Snackbar.LENGTH_LONG);
-
                     snackbar.show();
                     DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
                     DatabaseReference drWrite = referenceWrite.child("Quote").child(categoriesString).push();

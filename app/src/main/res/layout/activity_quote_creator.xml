@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:background="#0091EA"
+        android:background="@color/colorAccent"
         android:textColor="#fff"
         android:padding="8dp"
         android:id="@+id/Submit"
