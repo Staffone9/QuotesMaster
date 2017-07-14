@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private QuotesAdapter adapter;
     private List<QuoteData> quotesList;
     QuoteData mData;
+    ProgressBar pBar;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     @Override
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 //        startActivity(intent);
 
         //Code by Anjali
+
+        pBar = (ProgressBar)findViewById(R.id.progress_bar);
+        pBar.setVisibility(View.VISIBLE);
         quotesList = new ArrayList<>();
         adapter = new QuotesAdapter(this,quotesList,false);
 
@@ -67,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
                        // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
                     }
                     adapter.notifyDataSetChanged();
+                    recyclerView.setVisibility(View.VISIBLE);
+                    pBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -77,12 +85,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
     }
 
 
     public void getList() {
-        ArrayList<String> listOfCategory = new ArrayList<String>();
+        ArrayList<String> listOfCategory = new ArrayList<>();
         listOfCategory.add("Motivational");
         listOfCategory.add("Life");
         listOfCategory.add("Inspirational");

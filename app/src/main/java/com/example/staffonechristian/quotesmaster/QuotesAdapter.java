@@ -1,5 +1,7 @@
 package com.example.staffonechristian.quotesmaster;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 /**
  * Created by anjali desai on 12-07-2017.
  */
@@ -19,7 +23,7 @@ import java.util.List;
 public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHolder>{
 
     private List<QuoteData> quoteList;
-    Context context;
+    private Context context;
     private boolean heartState;
 
     public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState){
@@ -47,7 +51,11 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         holder.myCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Copy text",Toast.LENGTH_SHORT).show();
+                String cpdText = holder.mQuote.getText().toString()+"\n"+holder.mAuthor.getText().toString();
+                ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("Copied Text: ",cpdText);
+                clipboardManager.setPrimaryClip(clipData);
+                //Toast.makeText(context,"Copy text: "+cpdText,Toast.LENGTH_LONG).show();
             }
         });
 
