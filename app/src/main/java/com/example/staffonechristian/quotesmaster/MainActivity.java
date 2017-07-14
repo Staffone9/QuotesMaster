@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareQuotes(){
+        //Code by Staffone
         getList();
         for(int i=0;i<6;i++)
         {

@@ -14,7 +14,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="20sp"
-        android:layout_marginTop="@dimen/card_margin"
+        android:layout_marginTop="@dimen/some_spacing"
+        android:layout_marginBottom="@dimen/some_spacing"
         android:textColor="@color/colorBlack"
         android:text="Select your favourite categories"/>
 

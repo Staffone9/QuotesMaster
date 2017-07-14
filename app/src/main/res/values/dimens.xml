@@ -2,6 +2,7 @@
     <dimen name="card_quote_radius">2dp</dimen>
     <dimen name="my_padding">3dp</dimen>
     <dimen name="card_margin">5dp</dimen>
+    <dimen name="some_spacing">8dp</dimen>
     <dimen name="spaces">12dp</dimen>
     <dimen name="quote_author_text">16sp</dimen>
     <dimen name="quote_text">18sp</dimen>
