@@ -1,10 +1,10 @@
 <resources>
-    <dimen name="card_quote_radius">2dp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
     <dimen name="my_padding">3dp</dimen>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="some_spacing">8dp</dimen>
-    <dimen name="spaces">12dp</dimen>
-    <dimen name="quote_author_text">16sp</dimen>
+    <dimen name="spaces">10dp</dimen>
+    <dimen name="quote_author_text">15sp</dimen>
     <dimen name="quote_text">18sp</dimen>
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_height">245dp</dimen>

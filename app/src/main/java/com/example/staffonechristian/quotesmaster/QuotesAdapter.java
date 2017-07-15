@@ -5,12 +5,19 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -43,6 +50,10 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         holder.mQuote.setText(mData.getQuote());
         holder.mAuthor.setText(mData.getAuthor());
 
+        //final int mywid = holder.hellyeah.getWidth();
+        //int myhei = holder.myCard.getHeight();
+
+        //Picasso.with(holder.back_image.getContext()).load(R.drawable.mine).resize(dp2px(1000),0).into(holder.back_image);
        // if(position%2==0){
        //     holder.myCard.setBackgroundResource(R.drawable.bird1);
        //     holder.myCard.setAlpha((float) 0.2);
@@ -55,6 +66,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("Copied Text: ",cpdText);
                 clipboardManager.setPrimaryClip(clipData);
+                //Toast.makeText(context,mywid+"",Toast.LENGTH_SHORT).show();
                 //Toast.makeText(context,"Copy text: "+cpdText,Toast.LENGTH_LONG).show();
             }
         });
@@ -78,6 +90,15 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.quote_card,parent,false);
         return  new MyViewHolder(itemView);
     }
+
+    public int dp2px(int dp) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        display.getMetrics(displaymetrics);
+        return (int) (dp * displaymetrics.density + 0.5f);
+    }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         protected CardView myCard;

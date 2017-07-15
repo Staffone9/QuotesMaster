@@ -6,16 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/card_margin"
-    card_view:cardCornerRadius="@dimen/card_quote_radius"
-    card_view:cardBackgroundColor="@color/card_back">
+    card_view:cardCornerRadius="@dimen/card_corner_radius"
+    card_view:cardBackgroundColor="@color/test">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="10"
-        android:layout_margin="@dimen/card_quote_radius">
+        android:layout_margin="@dimen/card_corner_radius">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -29,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_gravity="center"
+                android:text="Quote"
+                android:textStyle="bold"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/quote_text" />
 
@@ -38,8 +38,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|end"
-                android:textColor="@color/colorBlack"
-                android:textStyle="bold"
+                android:text="-Author"
+                android:textStyle="italic"
+                android:textColor="@color/colorGrey"
                 android:textSize="@dimen/quote_author_text"
                 android:layout_marginTop="@dimen/spaces" />
         </LinearLayout>
@@ -54,18 +55,16 @@
                 android:id="@+id/copyIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/spaces"
-                android:contentDescription="Copy Text"
-                android:src="@drawable/copy_document"/>
+                android:src="@drawable/copy_doc"/>
 
             <ImageView
                 android:id="@+id/like_unlike"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/quote_author_text"
-                android:contentDescription="Like or Unlike"
                 android:src="@drawable/unlike"/>
 
         </LinearLayout>

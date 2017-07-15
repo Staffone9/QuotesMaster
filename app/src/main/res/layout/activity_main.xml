@@ -4,8 +4,7 @@
     tools:context="com.example.staffonechristian.quotesmaster.MainActivity"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progress_bar"
