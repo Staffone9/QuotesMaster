@@ -23,6 +23,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class SignIn extends AppCompatActivity {
 
@@ -32,12 +39,14 @@ public class SignIn extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static String TAG="Main_Activity";
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    boolean flag;
+    UserList userListVar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        userListVar = new UserList();
         mAuth = FirebaseAuth.getInstance();
 
         googleButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -78,7 +87,7 @@ public class SignIn extends AppCompatActivity {
                 SignIn();
             }
         });
-
+        flag=false;
     }
 
 
@@ -122,6 +131,7 @@ public class SignIn extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            CreateUser();
                               Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                               startActivity(intent);
                             Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
@@ -139,6 +149,69 @@ public class SignIn extends AppCompatActivity {
                         // ...
                     }
                 });
+    }
+
+    private void CreateUser() {
+
+        DatabaseReference referenceWriteOne = FirebaseDatabase.getInstance().getReference();
+
+        referenceWriteOne.child("Quote").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    userListVar = dataSnapshot.child("users").getValue(UserList.class);
+                   // System.out.println("userlistttt---->"+userListVar.getUserList().toString()+"mAuth: "+(mAuth.getCurrentUser().getEmail().toString()));
+                    if(userListVar!=null)
+                    {
+                        System.out.println(userListVar.getUserList().toString());
+                        String email = mAuth.getCurrentUser().getEmail().toString();
+                        for(String temp : userListVar.getUserList())
+                        {
+                            System.out.println("temp "+temp +"email "+email);
+                            if(temp.equals(email))
+                            {
+                                System.out.println("aaaayuuuuuuuuu --------");
+                                flag=true;
+                            }
+
+
+                        }
+                        if(!flag){
+
+                            DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
+                            DatabaseReference drWrite = referenceWrite.child("Quote").child("users");
+                            DatabaseReference userData = referenceWrite.child("Quote").child("UserData");
+
+                            userData.push();
+
+                            //set karta sikhvanu che
+                            UserList.userList.add(mAuth.getCurrentUser().getEmail());
+
+                            drWrite.setValue(userListVar);
+                        }else {
+
+                        }
+
+                    }else {
+
+                    }
+
+
+
+
+
+            }
+
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
     }
 
 }

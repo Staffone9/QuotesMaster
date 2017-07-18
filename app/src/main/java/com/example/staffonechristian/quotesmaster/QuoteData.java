@@ -11,9 +11,36 @@ public class QuoteData {
     private String quote;
     private String author;
     private String category;
+    private int quoteLikes;
+    private int quoteViews;
+    private float priorityScore;
+
 
     static ArrayList<String> listOfCategory = new ArrayList<String>();
 
+    public int getQuoteLikes() {
+        return quoteLikes;
+    }
+
+    public void setQuoteLikes(int quoteLikes) {
+        this.quoteLikes = quoteLikes;
+    }
+
+    public int getQuoteViews() {
+        return quoteViews;
+    }
+
+    public void setQuoteViews(int quoteViews) {
+        this.quoteViews = quoteViews;
+    }
+
+    public float getPriorityScore() {
+        return priorityScore;
+    }
+
+    public void setPriorityScore(float priorityScore) {
+        this.priorityScore = priorityScore;
+    }
 
     public static ArrayList<String> getListOfCategory() {
         return listOfCategory;

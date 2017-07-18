@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 int totalItemCount = layoutManager.getItemCount();
                 int lastItem = layoutManager.findLastVisibleItemPosition();
                // Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
-                System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size());
+            //    System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size());
             //    System.out.println("just check--->"+ lastItem+"k "+k);
                 if(lastItem == quotesList.size()-1){
                     if(k<5){
