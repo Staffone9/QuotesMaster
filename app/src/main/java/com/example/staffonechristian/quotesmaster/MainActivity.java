@@ -30,13 +30,14 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    int k;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        prepareQuotes(0);
+        k=0;
         //code by JamesBond007
 
         mAuth = FirebaseAuth.getInstance();
@@ -64,24 +65,54 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
-        prepareQuotes();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastItem = layoutManager.findLastVisibleItemPosition();
+               // Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
+                System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size());
+            //    System.out.println("just check--->"+ lastItem+"k "+k);
+                if(lastItem == quotesList.size()-1){
+                    if(k<5){
+                        prepareQuotes(++k);
+                    }
+                    if(k==5)
+                    {
+                        k=0;
+                    }
+
+
+
+                }
+            }
+        });
+
 
 
     }
 
     @Override
     protected void onStart() {
+
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-    private void prepareQuotes(){
+    private void prepareQuotes(int j){
         //Code by Staffone
         getList();
-        for(int i=0;i<6;i++)
-        {
 
-            DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(i));
+
+            DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(j));
 
             quoteReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -91,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
                         String author = individual.child("author").getValue(String.class);
                         mData = new QuoteData(quote, author);
                         quotesList.add(mData);
-
+                        adapter.notifyDataSetChanged();
                        // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
                     }
-                    adapter.notifyDataSetChanged();
+
                     recyclerView.setVisibility(View.VISIBLE);
                     pBar.setVisibility(View.GONE);
                 }
@@ -104,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-        }
+
 
 
     }
