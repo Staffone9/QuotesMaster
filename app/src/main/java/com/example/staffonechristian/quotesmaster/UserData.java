@@ -14,7 +14,13 @@ public class UserData {
     private static ArrayList<String> userFavouriteAuthor = new ArrayList<String>();
     private static ArrayList<String> userFavoriteCategories = new ArrayList<String>();
 
-
+    public UserData(String emailId){
+        userEmailID = emailId;
+        userLikedQuotes.add("empty");
+        userViewedQuotes.add("empty");
+        userFavouriteAuthor.add("empty");
+        userFavoriteCategories.add("empty");
+    }
     public String getUserEmailID() {
         return userEmailID;
     }

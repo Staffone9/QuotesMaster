@@ -87,9 +87,14 @@ public class SignIn extends AppCompatActivity {
                 SignIn();
             }
         });
-        flag=false;
+        flag=true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        flag=true;
+    }
 
     @Override
     protected void onStart() {
@@ -132,7 +137,7 @@ public class SignIn extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             CreateUser();
-                              Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                              Intent intent = new Intent(getApplicationContext(),QuoteCreator.class);
                               startActivity(intent);
                             Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
@@ -153,62 +158,51 @@ public class SignIn extends AppCompatActivity {
 
     private void CreateUser() {
 
+
         DatabaseReference referenceWriteOne = FirebaseDatabase.getInstance().getReference();
 
-        referenceWriteOne.child("Quote").addValueEventListener(new ValueEventListener() {
+        referenceWriteOne.child("Quote").child("UserData").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
+
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    userListVar = dataSnapshot.child("users").getValue(UserList.class);
-                   // System.out.println("userlistttt---->"+userListVar.getUserList().toString()+"mAuth: "+(mAuth.getCurrentUser().getEmail().toString()));
-                    if(userListVar!=null)
-                    {
-                        System.out.println(userListVar.getUserList().toString());
-                        String email = mAuth.getCurrentUser().getEmail().toString();
-                        for(String temp : userListVar.getUserList())
-                        {
-                            System.out.println("temp "+temp +"email "+email);
-                            if(temp.equals(email))
-                            {
-                                System.out.println("aaaayuuuuuuuuu --------");
-                                flag=true;
-                            }
-
-
-                        }
-                        if(!flag){
-
-                            DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
-                            DatabaseReference drWrite = referenceWrite.child("Quote").child("users");
-                            DatabaseReference userData = referenceWrite.child("Quote").child("UserData");
-
-                            userData.push();
-
-                            //set karta sikhvanu che
-                            UserList.userList.add(mAuth.getCurrentUser().getEmail());
-
-                            drWrite.setValue(userListVar);
-                        }else {
-
-                        }
-
-                    }else {
-
-                    }
-
-
-
-
-
+                String email = mAuth.getCurrentUser().getEmail();
+                for (DataSnapshot  data: dataSnapshot.getChildren()) {
+                    System.out.println("----->data :"+data.toString());
+                    flag=true;
+//                    if(data.child(email).exists())
+//                    {
+//                        Toast.makeText(getApplicationContext(),"User Exist", Toast.LENGTH_SHORT).show();
+//                    }else{
+//                        Toast.makeText(getApplicationContext(),"User does not Exist", Toast.LENGTH_SHORT).show();
+//                    }
+                }
             }
-
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
+
+
+        if(flag){
+            System.out.println("---Wrong flag");
+            DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference drWrite = referenceWrite.child("Quote").child("users").child(mAuth.getCurrentUser().getDisplayName());
+          //   DatabaseReference userData = referenceWrite.child("Quote").child("UserData").push();
+
+
+
+                            UserData userDataObject = new UserData(mAuth.getCurrentUser().getEmail());
+                            drWrite.setValue(userDataObject);
+//            UserList userListVar1 = new UserList();
+//            UserList.userList.add(mAuth.getCurrentUser().getEmail());
+//            System.out.println("---userList"+userListVar1.getUserList().toString());
+//            drWrite.setValue(userListVar1);
+        }else {
+
+        }
 
 
 
