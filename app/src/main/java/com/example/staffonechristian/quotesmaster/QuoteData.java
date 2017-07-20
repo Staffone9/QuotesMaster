@@ -15,7 +15,15 @@ public class QuoteData {
     private int quoteViews;
     private float priorityScore;
 
+    public QuoteData(){
 
+    }
+
+    public QuoteData(String mQuoteText, String mAuthor){
+        this.quote = mQuoteText;
+        this.author = mAuthor;
+
+    }
     static ArrayList<String> listOfCategory = new ArrayList<String>();
 
     public int getQuoteLikes() {
@@ -50,15 +58,7 @@ public class QuoteData {
         listOfCategory = listOfCategoryOne;
     }
 
-    public QuoteData(){
 
-    }
-
-    public QuoteData(String mQuoteText, String mAuthor){
-        this.quote = mQuoteText;
-        this.author = mAuthor;
-
-    }
 
     public String getQuote() {
         return quote;

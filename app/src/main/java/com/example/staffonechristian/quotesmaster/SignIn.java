@@ -139,7 +139,7 @@ public class SignIn extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             CreateUser();
-                              Intent intent = new Intent(getApplicationContext(),QuoteCreator.class);
+                              Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                               startActivity(intent);
                             Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
