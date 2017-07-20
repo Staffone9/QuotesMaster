@@ -16,10 +16,10 @@ public class UserData {
 
     public UserData(String emailId){
         userEmailID = emailId;
-        userLikedQuotes.add("empty");
-        userViewedQuotes.add("empty");
-        userFavouriteAuthor.add("empty");
-        userFavoriteCategories.add("empty");
+//        userLikedQuotes.add("empty");
+//        userViewedQuotes.add("empty");
+//        userFavouriteAuthor.add("empty");
+//        userFavoriteCategories.add("empty");
     }
     public String getUserEmailID() {
         return userEmailID;

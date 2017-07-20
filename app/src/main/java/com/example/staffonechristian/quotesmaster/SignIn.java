@@ -29,7 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SignIn extends AppCompatActivity {
 
@@ -187,19 +189,13 @@ public class SignIn extends AppCompatActivity {
 
 
         if(flag){
-            System.out.println("---Wrong flag");
             DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference drWrite = referenceWrite.child("Quote").child("users").child(mAuth.getCurrentUser().getDisplayName());
-          //   DatabaseReference userData = referenceWrite.child("Quote").child("UserData").push();
-
-
-
-                            UserData userDataObject = new UserData(mAuth.getCurrentUser().getEmail());
+            String email = mAuth.getCurrentUser().getEmail();
+            String uid = mAuth.getCurrentUser().getUid();
+            DatabaseReference drWrite = referenceWrite.child("Quote").child("users").child(uid);
+                            UserData userDataObject = new UserData(email);
                             drWrite.setValue(userDataObject);
-//            UserList userListVar1 = new UserList();
-//            UserList.userList.add(mAuth.getCurrentUser().getEmail());
-//            System.out.println("---userList"+userListVar1.getUserList().toString());
-//            drWrite.setValue(userListVar1);
+
         }else {
 
         }
