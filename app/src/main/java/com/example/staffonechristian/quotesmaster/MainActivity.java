@@ -3,11 +3,13 @@ package com.example.staffonechristian.quotesmaster;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private QuotesAdapter adapter;
-    //private NewQuoteAdapter adp;
     private List<QuoteData> quotesList;
     QuoteData mData;
     ProgressBar pBar;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseReference myRef = reference.child("Quote");
 
-        //adp = new NewQuoteAdapter(QuoteData.class,R.layout.quote_card, NewQuoteAdapter.MyViewHolder.class,myRef);
+
         //adp.setData(this,quotesList);
         //recyclerView.setAdapter(adp);
         recyclerView.setAdapter(adapter);
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
                         mData = new QuoteData(quote, author,key,quoLikes);
                         quotesList.add(mData);
                         adapter.notifyDataSetChanged();
+
+
                         //adp.notifyDataSetChanged();
                        // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
                     }

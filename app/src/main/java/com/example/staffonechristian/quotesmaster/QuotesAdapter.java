@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -39,7 +40,8 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     private List<QuoteData> quoteList;
     private Context context;
     private boolean heartState;
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
 
     public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState){
         this.context = mContext;
@@ -55,6 +57,11 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final QuoteData mData = quoteList.get(position);
+
+        //SpannableString ss = new SpannableString(mData.getQuote());
+        //ss.setSpan(new MyLeadingMarginSpan2(4, 3), 0, ss.length(), 0);
+
+
         holder.mQuote.setText(mData.getQuote());
         holder.mAuthor.setText(mData.getAuthor());
 
@@ -117,6 +124,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         protected CardView myCard;
         protected TextView mQuote;
         protected TextView mAuthor;
+        protected ImageView icon;
         protected ImageView myCopy;
         protected ImageView likeUnlike;
         public MyViewHolder(View itemView) {
@@ -124,6 +132,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
             myCard = (CardView)itemView.findViewById(R.id.card_view);
             mQuote = (TextView)itemView.findViewById(R.id.quoteTxtVw);
             mAuthor = (TextView)itemView.findViewById(R.id.quoteAuthorTxtVw);
+            icon = (ImageView)itemView.findViewById(R.id.myImage);
             myCopy = (ImageView)itemView.findViewById(R.id.copyIcon);
             likeUnlike = (ImageView)itemView.findViewById(R.id.like_unlike);
         }
