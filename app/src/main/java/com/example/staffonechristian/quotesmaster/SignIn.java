@@ -1,12 +1,15 @@
 package com.example.staffonechristian.quotesmaster;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -35,7 +38,7 @@ import java.util.Arrays;
 
 public class SignIn extends AppCompatActivity {
 
-    private SignInButton googleButton;
+    private Button googleButton;
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
@@ -48,10 +51,21 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        /*int orientation = getResources().getConfiguration().orientation;
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            Log.v(TAG,"Configuration.ORIENTATION_LANDSCAPE");
+        }
+        else if(orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            Log.v(TAG, "Configuration.ORIENTATION_PORTRAIT");
+        }*/
         userListVar = new UserList();
         mAuth = FirebaseAuth.getInstance();
 
-        googleButton = (SignInButton) findViewById(R.id.sign_in_button);
+        googleButton = (Button) findViewById(R.id.sign_in_button);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -4,10 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.staffonechristian.quotesmaster.SignIn">
-    <com.google.android.gms.common.SignInButton
+    tools:context="com.example.staffonechristian.quotesmaster.SignIn"
+    android:background="@mipmap/purple_back_blur2">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="@string/backdrop_title"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/colorGrey2"/>
+
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_below="@+id/title"
+        android:text="@string/backdrop_subtitle"
+        android:textSize="@dimen/sub_title_text_size"
+        android:textColor="@color/colorGrey2"/>
+
+    <Button
         android:id="@+id/sign_in_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="50dp"
+        style="@style/myButton"
+        android:text="Sign In With Google" />
 
 </RelativeLayout>
