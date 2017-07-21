@@ -18,6 +18,7 @@
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:id="@+id/myImage"
+            android:src="@drawable/william"
             android:padding="@dimen/my_padding"
             android:layout_margin="@dimen/card_margin"/>
 
@@ -48,8 +49,8 @@
             android:layout_margin="@dimen/card_margin"/>
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:id="@+id/like_unlike"
             android:layout_below="@+id/quoteAuthorTxtVw"
             android:src="@drawable/unlike"
@@ -59,8 +60,8 @@
             android:layout_alignParentEnd="true" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:id="@+id/copyIcon"
             android:layout_below="@+id/quoteAuthorTxtVw"
             android:src="@drawable/copy_doc"

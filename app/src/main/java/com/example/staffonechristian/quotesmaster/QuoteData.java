@@ -14,15 +14,17 @@ public class QuoteData {
     private int quoteLikes;
     private int quoteViews;
     private float priorityScore;
+    private String key;
 
     public QuoteData(){
 
     }
 
-    public QuoteData(String mQuoteText, String mAuthor){
+    public QuoteData(String mQuoteText, String mAuthor,String mKey,int mQuoteLikes){
         this.quote = mQuoteText;
         this.author = mAuthor;
-
+        this.key = mKey;
+        this.quoteLikes = mQuoteLikes;
     }
     static ArrayList<String> listOfCategory = new ArrayList<String>();
 
@@ -58,7 +60,11 @@ public class QuoteData {
         listOfCategory = listOfCategoryOne;
     }
 
+    public String getKey(){return key;}
 
+    public void setKey(String mKey){
+        this.key = mKey;
+    }
 
     public String getQuote() {
         return quote;

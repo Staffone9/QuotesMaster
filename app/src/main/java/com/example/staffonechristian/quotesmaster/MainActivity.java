@@ -1,5 +1,7 @@
 package com.example.staffonechristian.quotesmaster;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private QuotesAdapter adapter;
+    //private NewQuoteAdapter adp;
     private List<QuoteData> quotesList;
     QuoteData mData;
     ProgressBar pBar;
@@ -51,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        //Code by Anjali
 
+        //Code by Anjali
         pBar = (ProgressBar)findViewById(R.id.progress_bar);
         pBar.setVisibility(View.VISIBLE);
         quotesList = new ArrayList<>();
@@ -63,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
+
+        DatabaseReference myRef = reference.child("Quote");
+
+        //adp = new NewQuoteAdapter(QuoteData.class,R.layout.quote_card, NewQuoteAdapter.MyViewHolder.class,myRef);
+        //adp.setData(this,quotesList);
+        //recyclerView.setAdapter(adp);
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -89,15 +99,9 @@ public class MainActivity extends AppCompatActivity {
                     {
                         k=0;
                     }
-
-
-
                 }
             }
         });
-
-
-
     }
 
     @Override
@@ -110,8 +114,6 @@ public class MainActivity extends AppCompatActivity {
     private void prepareQuotes(int j){
         //Code by Staffone
         getList();
-
-
             DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(j));
 
             quoteReference.addValueEventListener(new ValueEventListener() {
@@ -120,9 +122,12 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot individual : dataSnapshot.getChildren()) {
                         String quote = individual.child("quote").getValue(String.class);
                         String author = individual.child("author").getValue(String.class);
-                        mData = new QuoteData(quote, author);
+                        String key = individual.child("key").getValue(String.class);
+                        int quoLikes = individual.child("quoteLikes").getValue(Integer.class);
+                        mData = new QuoteData(quote, author,key,quoLikes);
                         quotesList.add(mData);
                         adapter.notifyDataSetChanged();
+                        //adp.notifyDataSetChanged();
                        // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
                     }
 
@@ -132,14 +137,9 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
-
-
-
     }
-
 
     public void getList() {
         ArrayList<String> listOfCategory = new ArrayList<>();
@@ -151,4 +151,6 @@ public class MainActivity extends AppCompatActivity {
         listOfCategory.add("Positive");
         mData.setListOfCategory(listOfCategory);
     }
+
+
 }

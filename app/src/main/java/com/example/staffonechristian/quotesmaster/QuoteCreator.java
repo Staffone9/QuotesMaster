@@ -28,6 +28,7 @@ public class QuoteCreator extends AppCompatActivity implements  AdapterView.OnIt
     Button submitButton;
     boolean flag=false;
     String categoriesString="unknown";
+    String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,12 +120,18 @@ public class QuoteCreator extends AppCompatActivity implements  AdapterView.OnIt
                     snackbar.show();
                     DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
                     DatabaseReference drWrite = referenceWrite.child("Quote").child(categoriesString).push();
+                    //change**************************************************************************************
+                    key = drWrite.getKey();
+                    //change complete*****************************************************************************
                     QuoteData quoteData = new QuoteData();
                     quoteData.setQuote(quoteText.getText().toString());
                     quoteData.setAuthor("-"+quoteAuthorText.getText().toString());
                     quoteData.setQuoteLikes(0);
                     quoteData.setQuoteViews(0);
                     quoteData.setPriorityScore(0);
+                    //change**************************************************************************************
+                    quoteData.setKey(key);
+                    //change complete*****************************************************************************
                     drWrite.setValue(quoteData);
                 }
             }

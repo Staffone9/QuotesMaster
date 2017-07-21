@@ -13,7 +13,5 @@ public class CheckUser {
 
     public void CheckUserInDatabase(){
         mAuth.addAuthStateListener(mAuthListener);
-
-
     }
 }

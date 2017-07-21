@@ -17,9 +17,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -32,6 +39,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     private List<QuoteData> quoteList;
     private Context context;
     private boolean heartState;
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState){
         this.context = mContext;
@@ -46,7 +54,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        QuoteData mData = quoteList.get(position);
+        final QuoteData mData = quoteList.get(position);
         holder.mQuote.setText(mData.getQuote());
         holder.mAuthor.setText(mData.getAuthor());
 
@@ -74,12 +82,17 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         holder.likeUnlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(!heartState){
                     holder.likeUnlike.setImageResource(R.drawable.like);
+
+                    mData.setQuoteLikes(mData.getQuoteLikes() + 1);
                 }
                 else {
                     holder.likeUnlike.setImageResource(R.drawable.unlike);
+                    mData.setQuoteLikes(mData.getQuoteLikes() - 1);
                 }
+                Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes(),Toast.LENGTH_LONG).show();
                 heartState = !heartState;
             }
         });
