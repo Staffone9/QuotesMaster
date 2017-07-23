@@ -7,6 +7,8 @@
     <color name="card_back">#00897B</color>
     <color name="colorGrey">#616161</color>
     <color name="colorGrey2">#EEEEEE</color>
+    <color name="inactive_color_grey">#F5F5F5</color>
+
     <color name="btn2">#FFAB91</color>
     <color name="textColor">#1DE9B6</color>
     <color name="textColor2">#00BFA5</color>
@@ -14,4 +16,7 @@
     <color name="button_back">#E64A19</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <color name="inactive">#FFFFFF</color>
+    <color name="active">#9E9E9E</color>
 </resources>

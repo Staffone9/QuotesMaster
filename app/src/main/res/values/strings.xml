@@ -4,7 +4,17 @@
     <string name="copy_text">Copy Quote</string>
     <string name="share_text">Share Quote</string>
     <string name="like_text">Like</string>
-    <string name="backdrop_title">MAGICAL QUOTES</string>
-    <string name="backdrop_subtitle">A smile is a curve that sets everything straight</string>
+
+    <string name="slide_1_title">MAGICAL QUOTES</string>
+    <string name="slide_1_desc">A smile is a curve that sets everything straight</string>
+
+    <string name="slide_2_title">HII</string>
+    <string name="slide_2_desc">This is second page</string>
+
+    <string name="slide_3_title">HII</string>
+    <string name="slide_3_desc">This is third page</string>
+
+    <string name="slide_4_title">HII</string>
+    <string name="slide_4_desc">This is fourth page</string>
 
 </resources>
