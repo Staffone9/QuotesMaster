@@ -121,11 +121,14 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot individual : dataSnapshot.getChildren()) {
-                        String quote = individual.child("quote").getValue(String.class);
-                        String author = individual.child("author").getValue(String.class);
-                        String key = individual.child("key").getValue(String.class);
-                        int quoLikes = individual.child("quoteLikes").getValue(Integer.class);
-                        mData = new QuoteData(quote, author,key,quoLikes);
+//                        String quote = individual.child("quote").getValue(String.class);
+//                        String author = individual.child("author").getValue(String.class);
+//                        String key = individual.child("key").getValue(String.class);
+//                        int quoLikes = individual.child("quoteLikes").getValue(Integer.class);
+//                        String category = individual.child("category").getValue(String.class);
+//                        int like
+                        mData = new QuoteData();
+                        mData = individual.getValue(QuoteData.class);
                         quotesList.add(mData);
                         adapter.notifyDataSetChanged();
 

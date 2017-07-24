@@ -40,6 +40,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     private List<QuoteData> quoteList;
     private Context context;
     private boolean heartState;
+    QuoteIntelligence quoteIntelligence;
     //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
 
@@ -89,6 +90,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         holder.likeUnlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                quoteIntelligence = new QuoteIntelligence();
 
                 if(!heartState){
                     holder.likeUnlike.setImageResource(R.drawable.like);
@@ -99,7 +101,14 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                     holder.likeUnlike.setImageResource(R.drawable.unlike);
                     mData.setQuoteLikes(mData.getQuoteLikes() - 1);
                 }
-                Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes(),Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes() +"\nCategory: "+mData.getCategory(),Toast.LENGTH_LONG).show();
+                System.out.println("---->mData"+mData.toString());
+                if(mData.getCategory() != null)
+                {
+                    quoteIntelligence.LikesAdd(mData.getKey(), mData.getCategory());
+                }
+
+
                 heartState = !heartState;
             }
         });

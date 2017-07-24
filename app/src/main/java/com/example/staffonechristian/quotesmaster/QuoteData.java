@@ -16,6 +16,19 @@ public class QuoteData {
     private float priorityScore;
     private String key;
 
+    @Override
+    public String toString() {
+        return "QuoteData{" +
+                "quote='" + quote + '\'' +
+                ", author='" + author + '\'' +
+                ", category='" + category + '\'' +
+                ", quoteLikes=" + quoteLikes +
+                ", quoteViews=" + quoteViews +
+                ", priorityScore=" + priorityScore +
+                ", key='" + key + '\'' +
+                '}';
+    }
+
     public QuoteData(){
 
     }
