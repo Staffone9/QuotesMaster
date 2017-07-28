@@ -24,10 +24,18 @@ public class QuoteIntelligence {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                // System.out.println("------>DatasnapShot"+dataSnapshot.toString());
+
                 for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
                      ) {
                     int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
-                    dataSnapShotOne.child("quoteLikes").getRef().setValue(++likes);
+                    if(QuotesAdapter.heartState==true)
+                    {
+
+                        dataSnapShotOne.child("quoteLikes").getRef().setValue(++likes);
+                    }else{
+                        dataSnapShotOne.child("quoteLikes").getRef().setValue(--likes);
+                    }
+
                     System.out.println("------>likessss"+likes);
                 }
 

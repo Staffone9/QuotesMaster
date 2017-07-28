@@ -39,7 +39,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
 
     private List<QuoteData> quoteList;
     private Context context;
-    private boolean heartState;
+    public static boolean heartState;
     QuoteIntelligence quoteIntelligence;
     //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
@@ -94,7 +94,6 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
 
                 if(!heartState){
                     holder.likeUnlike.setImageResource(R.drawable.like);
-
                     mData.setQuoteLikes(mData.getQuoteLikes() + 1);
                 }
                 else {
