@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/btn2">
+    android:background="@mipmap/house_back_blur">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/slide_3_title"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
             android:paddingRight="@dimen/my_padding"
             android:text="@string/slide_3_desc"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/sub_title_text_size" />
 
     </LinearLayout>

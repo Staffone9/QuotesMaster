@@ -19,8 +19,14 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="myButton">
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/button_text_size</item>
         <item name="android:background">@drawable/btn_round</item>
+    </style>
+
+    <style name="myButton2">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:background">@drawable/btn_round2</item>
     </style>
 </resources>

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/card_margin"
     card_view:cardCornerRadius="@dimen/card_corner_radius"
-    card_view:cardBackgroundColor="@color/card_back">
+    card_view:cardBackgroundColor="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_toRightOf="@+id/myImage"
             android:text="Quote"
             android:textSize="@dimen/quote_text"
-            android:textColor="@color/textColor"
+            android:textColor="@android:color/black"
             android:gravity="center_horizontal"
             android:padding="@dimen/my_padding"
             android:layout_margin="@dimen/card_margin"/>
@@ -42,7 +42,7 @@
             android:layout_below="@+id/quoteTxtVw"
             android:text="-Author"
             android:textSize="@dimen/quote_author_text"
-            android:textColor="@color/textColor2"
+            android:textColor="@android:color/black"
             android:textStyle="italic"
             android:gravity="center_horizontal|start"
             android:padding="@dimen/my_padding"

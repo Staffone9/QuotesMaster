@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.staffonechristian.quotesmaster.Category"
-    android:background="@color/colorWhite">
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/category"
@@ -16,7 +16,7 @@
         android:textSize="20sp"
         android:layout_marginTop="@dimen/some_spacing"
         android:layout_marginBottom="@dimen/some_spacing"
-        android:textColor="@color/colorBlack"
+        android:textColor="@android:color/black"
         android:text="Select your favourite categories"/>
 
     <LinearLayout
