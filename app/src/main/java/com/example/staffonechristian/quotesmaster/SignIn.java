@@ -66,11 +66,13 @@ public class SignIn extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private PrefManager prefManager;
+    QuoteIntelligence quoteIntelligence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Checking for first time launch - before calling setContentView()
+        quoteIntelligence = new QuoteIntelligence();
         prefManager = new PrefManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
@@ -295,7 +297,8 @@ public class SignIn extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            CreateUser();
+                            quoteIntelligence.UserGet();
+
                               Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                               startActivity(intent);
                             Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
@@ -315,47 +318,49 @@ public class SignIn extends AppCompatActivity {
                 });
     }
 
-    private void CreateUser() {
+    public void CreateUser() {
 
 
-        DatabaseReference referenceWriteOne = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference referenceWriteOne = FirebaseDatabase.getInstance().getReference();
 
-        referenceWriteOne.child("Quote").child("UserData").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
+            referenceWriteOne.child("Quote").child("UserData").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
 
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String email = mAuth.getCurrentUser().getEmail();
-                for (DataSnapshot  data: dataSnapshot.getChildren()) {
-                    System.out.println("----->data :"+data.toString());
-                    flag=true;
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String email = mAuth.getCurrentUser().getEmail();
+                    for (DataSnapshot  data: dataSnapshot.getChildren()) {
+                        System.out.println("----->data :"+data.toString());
+                        flag=true;
 //                    if(data.child(email).exists())
 //                    {
 //                        Toast.makeText(getApplicationContext(),"User Exist", Toast.LENGTH_SHORT).show();
 //                    }else{
 //                        Toast.makeText(getApplicationContext(),"User does not Exist", Toast.LENGTH_SHORT).show();
 //                    }
+                    }
                 }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+            if(flag){
+                DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
+                String email = mAuth.getCurrentUser().getEmail();
+                String uid = mAuth.getCurrentUser().getUid();
+                DatabaseReference drWrite = referenceWrite.child("Quote").child("users").child(uid);
+                UserData userDataObject = new UserData(email);
+                drWrite.setValue(userDataObject);
+
+            }else {
+
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-
-
-        if(flag){
-            DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
-            String email = mAuth.getCurrentUser().getEmail();
-            String uid = mAuth.getCurrentUser().getUid();
-            DatabaseReference drWrite = referenceWrite.child("Quote").child("users").child(uid);
-                            UserData userDataObject = new UserData(email);
-                            drWrite.setValue(userDataObject);
-
-        }else {
-
-        }
 
 
 

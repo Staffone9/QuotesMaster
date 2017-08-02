@@ -32,10 +32,12 @@ public class MainActivity extends AppCompatActivity {
     private List<QuoteData> quotesList;
     QuoteData mData;
     ProgressBar pBar;
+    QuoteIntelligence quoteIntelligence;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     int k;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 int totalItemCount = layoutManager.getItemCount();
                 int lastItem = layoutManager.findLastVisibleItemPosition();
                // Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
-            //    System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size());
+                System.out.println("------->P lastItem="+lastItem);
             //    System.out.println("just check--->"+ lastItem+"k "+k);
                 if(lastItem == quotesList.size()-1){
                     if(k<5){
@@ -107,9 +109,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
+        quoteIntelligence = new QuoteIntelligence();
+        quoteIntelligence.UserGet();
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        quoteIntelligence = new QuoteIntelligence();
+        quoteIntelligence.UserGet();
+        super.onResume();
     }
 
     private void prepareQuotes(int j){
@@ -117,20 +129,30 @@ public class MainActivity extends AppCompatActivity {
         getList();
             DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(j));
 
-            quoteReference.addValueEventListener(new ValueEventListener() {
+            quoteReference.orderByChild("priorityScore").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot individual : dataSnapshot.getChildren()) {
-//                        String quote = individual.child("quote").getValue(String.class);
-//                        String author = individual.child("author").getValue(String.class);
-//                        String key = individual.child("key").getValue(String.class);
-//                        int quoLikes = individual.child("quoteLikes").getValue(Integer.class);
-//                        String category = individual.child("category").getValue(String.class);
-//                        int like
+//
                         mData = new QuoteData();
                         mData = individual.getValue(QuoteData.class);
-                        quotesList.add(mData);
-                        adapter.notifyDataSetChanged();
+                        if(UserData.userViewedQuotes != null && QuoteIntelligence.flag)
+                        {
+                            if(!UserData.userViewedQuotes.contains(mData.getKey()))
+                            {
+                                System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
+                                quotesList.add(mData);
+                                adapter.notifyDataSetChanged();
+                                UserData.userViewedQuotes.add(mData.getKey());
+                            }
+                        }else if(mData.getKey()!= null ) {
+                            quotesList.add(mData);
+                            adapter.notifyDataSetChanged();
+                            System.out.println("Key--------->"+mData.getKey());
+                            UserData.userViewedQuotes.add(mData.getKey());
+
+                        }
+
 
 
                         //adp.notifyDataSetChanged();
@@ -145,6 +167,25 @@ public class MainActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
+
+//        System.out.println("key "+UserData.userViewedQuotes.toString());
+    }
+
+    @Override
+    protected void onPause() {
+        QuoteIntelligence.UserViewsAdd();
+        QuoteIntelligence.EndUserLikeUpdate();
+        super.onPause();
+
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        QuoteIntelligence.UserViewsAdd();
+        QuoteIntelligence.EndUserLikeUpdate();
+        super.onDestroy();
     }
 
     public void getList() {

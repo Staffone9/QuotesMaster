@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class UserData {
 
-    private static String userEmailID;
-    private static ArrayList<String> userLikedQuotes = new ArrayList<String>();
-    private static ArrayList<String> userViewedQuotes = new ArrayList<String>();
-    private static ArrayList<String> userFavouriteAuthor = new ArrayList<String>();
-    private static ArrayList<String> userFavoriteCategories = new ArrayList<String>();
+    public static String userEmailID;
+    public static ArrayList<String> userLikedQuotes = new ArrayList<String>();
+    public static ArrayList<String> userViewedQuotes = new ArrayList<String>();
+    public static ArrayList<String> userFavouriteAuthor = new ArrayList<String>();
+    public static ArrayList<String> userFavoriteCategories = new ArrayList<String>();
 
     public UserData(String emailId){
         userEmailID = emailId;
@@ -20,6 +20,10 @@ public class UserData {
 //        userViewedQuotes.add("empty");
 //        userFavouriteAuthor.add("empty");
 //        userFavoriteCategories.add("empty");
+    }
+
+    public UserData(){
+
     }
     public String getUserEmailID() {
         return userEmailID;

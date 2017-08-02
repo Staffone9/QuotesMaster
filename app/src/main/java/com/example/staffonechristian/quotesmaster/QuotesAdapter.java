@@ -95,10 +95,12 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 if(!heartState){
                     holder.likeUnlike.setImageResource(R.drawable.like);
                     mData.setQuoteLikes(mData.getQuoteLikes() + 1);
+                    heartState = true;
                 }
                 else {
                     holder.likeUnlike.setImageResource(R.drawable.unlike);
                     mData.setQuoteLikes(mData.getQuoteLikes() - 1);
+                    heartState = false;
                 }
                 Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes() +"\nCategory: "+mData.getCategory(),Toast.LENGTH_LONG).show();
                 System.out.println("---->mData"+mData.toString());
@@ -108,7 +110,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 }
 
 
-                heartState = !heartState;
+                heartState = false;
             }
         });
     }
