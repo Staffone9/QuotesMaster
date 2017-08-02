@@ -19,8 +19,7 @@
             android:layout_alignParentTop="true"
             android:src="@drawable/william"
             android:id="@+id/myImage"
-            android:layout_margin="@dimen/card_margin"
-            />
+            android:layout_margin="@dimen/card_margin" />
 
         <TextView
             android:layout_width="match_parent"
@@ -30,8 +29,7 @@
             android:text="Quote"
             android:textSize="@dimen/quote_text"
             android:textColor="@android:color/black"
-            android:gravity="center_horizontal"
-            android:padding="@dimen/my_padding"
+            android:gravity="left"
             android:layout_margin="@dimen/card_margin"/>
 
         <TextView
@@ -45,7 +43,6 @@
             android:textColor="@android:color/black"
             android:textStyle="italic"
             android:gravity="center_horizontal|start"
-            android:padding="@dimen/my_padding"
             android:layout_margin="@dimen/card_margin"/>
 
         <ImageView
@@ -54,7 +51,6 @@
             android:id="@+id/like_unlike"
             android:layout_below="@+id/quoteAuthorTxtVw"
             android:src="@drawable/unlike"
-            android:padding="@dimen/my_padding"
             android:layout_margin="@dimen/card_margin"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -65,7 +61,6 @@
             android:id="@+id/copyIcon"
             android:layout_below="@+id/quoteAuthorTxtVw"
             android:src="@drawable/copy_doc"
-            android:padding="@dimen/my_padding"
             android:layout_margin="@dimen/card_margin"
             android:layout_toLeftOf="@+id/like_unlike"/>
 

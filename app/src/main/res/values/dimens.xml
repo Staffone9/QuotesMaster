@@ -6,7 +6,7 @@
     <dimen name="spaces">10dp</dimen>
 
     <dimen name="icon_spaces">13dp</dimen>
-    <dimen name="icon_size">40dp</dimen>
+    <dimen name="icon_size">30dp</dimen>
 
     <dimen name="quote_text">18sp</dimen>
     <dimen name="quote_author_text">15sp</dimen>
