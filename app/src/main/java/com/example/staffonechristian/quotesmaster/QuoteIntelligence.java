@@ -44,7 +44,7 @@ public class QuoteIntelligence {
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(--likes);
                     }
 
-                    System.out.println("------>likessss"+likes);
+                    System.out.println("------>likessss------>"+likes);
                 }
 
             }

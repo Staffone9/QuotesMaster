@@ -138,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
                         mData = individual.getValue(QuoteData.class);
                         if(UserData.userViewedQuotes != null && QuoteIntelligence.flag)
                         {
-                            if(!UserData.userViewedQuotes.contains(mData.getKey()))
-                            {
+                            //if(!UserData.userViewedQuotes.contains(mData.getKey()))
+                            //{
                                 System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
                                 quotesList.add(mData);
                                 adapter.notifyDataSetChanged();
                                 UserData.userViewedQuotes.add(mData.getKey());
-                            }
+                            //}
                         }else if(mData.getKey()!= null ) {
                             quotesList.add(mData);
                             adapter.notifyDataSetChanged();
