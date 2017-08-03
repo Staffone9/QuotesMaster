@@ -104,6 +104,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                     //mData.setQuoteLikes(mData.getQuoteLikes() + 1);
                 }
                 else {
+
                     flag=false;
                     holder.likeUnlike.setTag("unlike");
                     holder.likeUnlike.setImageResource(R.drawable.unlike);
