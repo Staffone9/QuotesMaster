@@ -5,65 +5,88 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"
     card_view:cardCornerRadius="@dimen/card_corner_radius"
     card_view:cardBackgroundColor="@android:color/white">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/myLin1">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/william"
-            android:id="@+id/myImage"
-            android:layout_margin="@dimen/card_margin" />
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/quoteTxtVw"
-            android:layout_toRightOf="@+id/myImage"
-            android:text="Quote"
-            android:textSize="@dimen/quote_text"
-            android:textColor="@android:color/black"
-            android:gravity="left"
-            android:layout_margin="@dimen/card_margin"/>
+            android:orientation="horizontal"
+            android:id="@+id/myLin2">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/quoteAuthorTxtVw"
-            android:layout_toRightOf="@+id/myImage"
-            android:layout_below="@+id/quoteTxtVw"
-            android:text="-Author"
-            android:textSize="@dimen/quote_author_text"
-            android:textColor="@android:color/black"
-            android:textStyle="italic"
-            android:gravity="center_horizontal|start"
-            android:layout_margin="@dimen/card_margin"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/william"
+                android:id="@+id/myImage"
+                android:layout_marginLeft="@dimen/some_spacing"
+                android:layout_marginTop="@dimen/some_spacing"/>
 
-        <ImageView
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:id="@+id/like_unlike"
-            android:layout_below="@+id/quoteAuthorTxtVw"
-            android:src="@drawable/unlike"
-            android:layout_margin="@dimen/card_margin"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/myLin3">
 
-        <ImageView
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:id="@+id/copyIcon"
-            android:layout_below="@+id/quoteAuthorTxtVw"
-            android:src="@drawable/copy_doc"
-            android:layout_margin="@dimen/card_margin"
-            android:layout_toLeftOf="@+id/like_unlike"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quoteTxtVw"
+                    android:text="Quote"
+                    android:textSize="@dimen/quote_text"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical|start"
+                    android:layout_marginLeft="@dimen/some_spacing"
+                    android:layout_marginTop="@dimen/some_spacing"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quoteAuthorTxtVw"
+                    android:text="-Author"
+                    android:textSize="@dimen/quote_author_text"
+                    android:textColor="@android:color/black"
+                    android:textStyle="italic"
+                    android:gravity="center_vertical|start"
+                    android:layout_marginLeft="@dimen/some_spacing"
+                    android:layout_marginTop="@dimen/some_spacing"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/myLin4">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:id="@+id/like_unlike"
+                        android:src="@drawable/unlike"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toLeftOf="@+id/copyIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:id="@+id/copyIcon"
+                        android:src="@drawable/copy_doc"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

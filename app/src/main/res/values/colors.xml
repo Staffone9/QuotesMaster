@@ -3,7 +3,11 @@
     <color name="colorPrimary">#4a148c</color>
     <color name="colorPrimaryDark">#12005e</color>
     <color name="colorAccent">#FF6E40</color>
-    <color name="card_back">#FBE9E7</color>
+
+    <color name="grey">#E0E0E0</color>
+    <color name="myc1">#D32F2F</color>
+    <color name="myc2">#1976D2</color>
+    <color name="myc3">#FFA000</color>
 
     <color name="button_back">#FF6E40</color>
     <color name="button_ripple">#FFAB91</color>

@@ -5,7 +5,7 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/grey">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -19,6 +19,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:visibility="gone"
-        android:padding="5dp"/>
+        android:visibility="gone" />
 </FrameLayout>

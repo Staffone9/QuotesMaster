@@ -56,25 +56,23 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         final QuoteData mData = quoteList.get(position);
 
         //SpannableString ss = new SpannableString(mData.getQuote());
         //ss.setSpan(new MyLeadingMarginSpan2(4, 3), 0, ss.length(), 0);
 
 
+        //holder.mQuote.setText(mData.getQuote());
+        //String text = mData.getQuote();
+        //int myMarg = holder.icon.getWidth() + 10;
+        //SpannableString ss = new SpannableString(text);
+        //ss.setSpan(new MyLeadingMarginSpan2(4,myMarg),0,ss.length(),0);
+        //holder.mQuote.setText(ss);
         holder.mQuote.setText(mData.getQuote());
         holder.mAuthor.setText(mData.getAuthor());
 
-        //final int mywid = holder.hellyeah.getWidth();
-        //int myhei = holder.myCard.getHeight();
-
-        //Picasso.with(holder.back_image.getContext()).load(R.drawable.mine).resize(dp2px(1000),0).into(holder.back_image);
-       // if(position%2==0){
-       //     holder.myCard.setBackgroundResource(R.drawable.bird1);
-       //     holder.myCard.setAlpha((float) 0.2);
-       // }
-        //heartState = false;
         holder.myCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,8 +80,6 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("Copied Text: ",cpdText);
                 clipboardManager.setPrimaryClip(clipData);
-                //Toast.makeText(context,mywid+"",Toast.LENGTH_SHORT).show();
-                //Toast.makeText(context,"Copy text: "+cpdText,Toast.LENGTH_LONG).show();
             }
         });
 
@@ -95,13 +91,11 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
 
                 if(heartState == true){
                     holder.likeUnlike.setImageResource(R.drawable.like);
-                    //mData.setQuoteLikes(mData.getQuoteLikes() + 1);
                 }
                 else {
                     holder.likeUnlike.setImageResource(R.drawable.unlike);
-                    //mData.setQuoteLikes(mData.getQuoteLikes() - 1);
                 }
-                Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes() +"\nCategory: "+mData.getCategory(),Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"hjk: "+position,Toast.LENGTH_LONG).show();
                 System.out.println("---->mData"+mData.toString());
                 if(mData.getCategory() != null)
                 {
@@ -117,14 +111,6 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         return  new MyViewHolder(itemView);
     }
 
-    public int dp2px(int dp) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        display.getMetrics(displaymetrics);
-        return (int) (dp * displaymetrics.density + 0.5f);
-    }
-
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         protected CardView myCard;
@@ -133,6 +119,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         protected ImageView icon;
         protected ImageView myCopy;
         protected ImageView likeUnlike;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             myCard = (CardView)itemView.findViewById(R.id.card_view);
