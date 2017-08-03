@@ -24,7 +24,7 @@ public class QuoteIntelligence {
     static boolean flag=false;
 
 
-    public void LikesAdd(String tempKey,String tempCategory)
+    public void LikesAdd(String tempKey, String tempCategory, final boolean heart)
     {
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -38,7 +38,7 @@ public class QuoteIntelligence {
                 for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
                      ) {
                     int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
-                    if(QuotesAdapter.heartState==true)
+                    if(heart==true)
                     {
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(++likes);
                     }else{
@@ -103,44 +103,7 @@ public class QuoteIntelligence {
 
     }
 
-    public static boolean UserGet(){
-        FirebaseAuth auth;
-        auth = FirebaseAuth.getInstance();
-        final SignIn signIn = new SignIn();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference updateRef =  databaseReference.child("Quote").child("users");
 
-            updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot dataSnapshotfor : dataSnapshot.getChildren()) {
-                        if (dataSnapshotfor != null) {
-                            UserData userData = dataSnapshotfor.getValue(UserData.class);
-                            System.out.println("--->Quote Intelligence" + userData.getUserViewedQuotes().size());
-                            flag = true;
-
-
-                        } else {
-                            signIn.CreateUser();
-                            flag = true;
-                        }
-
-
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            System.out.println("Flag--->" + flag);
-
-        return flag;
-    }
 
 
 }
