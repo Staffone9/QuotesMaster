@@ -32,19 +32,29 @@ public class MainActivity extends AppCompatActivity {
     private List<QuoteData> quotesList;
     QuoteData mData;
     ProgressBar pBar;
+    int lastItem=1;
     QuoteIntelligence quoteIntelligence;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     int k;
-
+    int counter=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        prepareQuotes(0);
+        getList();
+
+        for(int i=0;i < mData.listOfCategory.size() && counter<8 ;i++)
+        {
+            prepareQuotes(i);
+            counter++;
+
+        }
+
         k=0;
+        System.out.println("--->Array ma value check"+UserData.userViewedQuotes.toString()+"---->Size"+UserData.userViewedQuotes.size());
         //code by JamesBond007
 
         mAuth = FirebaseAuth.getInstance();
@@ -59,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        if(UserData.userViewedQuotes.contains("KpXFiAB6FNkJ2jhtnEf"))
+        {
+            System.out.println("-------Contain");
+
+        }else {
+            System.out.println("--------Do not Contain");
+        }
         //Code by Anjali
         pBar = (ProgressBar)findViewById(R.id.progress_bar);
         pBar.setVisibility(View.VISIBLE);
@@ -90,11 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
-                int lastItem = layoutManager.findLastVisibleItemPosition();
+                lastItem = layoutManager.findLastVisibleItemPosition();
                // Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
-                System.out.println("------->P lastItem="+lastItem);
+             //   System.out.println("------->P lastItem="+lastItem);
             //    System.out.println("just check--->"+ lastItem+"k "+k);
-                if(lastItem == quotesList.size()-1){
+                if(lastItem <= quotesList.size()-1){
                     if(k<5){
                         prepareQuotes(++k);
                     }
@@ -109,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        quoteIntelligence = new QuoteIntelligence();
-        quoteIntelligence.UserGet();
+
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
@@ -119,14 +135,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        quoteIntelligence = new QuoteIntelligence();
-        quoteIntelligence.UserGet();
+
         super.onResume();
     }
 
     private void prepareQuotes(int j){
         //Code by Staffone
-        getList();
+
             DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(j));
 
             quoteReference.orderByChild("priorityScore").addValueEventListener(new ValueEventListener() {
@@ -136,21 +151,25 @@ public class MainActivity extends AppCompatActivity {
 //
                         mData = new QuoteData();
                         mData = individual.getValue(QuoteData.class);
-                        if(UserData.userViewedQuotes != null && QuoteIntelligence.flag)
+
+                        if(UserData.userViewedQuotes.size() > 0 )
                         {
-                            //if(!UserData.userViewedQuotes.contains(mData.getKey()))
-                            //{
+
+                            if(!UserData.userViewedQuotes.contains(mData.getKey()))
+                            {
                                 System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
                                 quotesList.add(mData);
                                 adapter.notifyDataSetChanged();
                                 UserData.userViewedQuotes.add(mData.getKey());
-                            //}
-                        }else if(mData.getKey()!= null ) {
+                            }
+                        }else if(mData.getKey()!= null) {
                             quotesList.add(mData);
                             adapter.notifyDataSetChanged();
                             System.out.println("Key--------->"+mData.getKey());
                             UserData.userViewedQuotes.add(mData.getKey());
 
+                        }else {
+                            System.out.println("aa else ni size--------->"+UserData.userViewedQuotes.size());
                         }
 
 

@@ -1,5 +1,6 @@
 package com.example.staffonechristian.quotesmaster;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,44 +103,42 @@ public class QuoteIntelligence {
 
     }
 
-    public  boolean UserGet(){
+    public static boolean UserGet(){
         FirebaseAuth auth;
         auth = FirebaseAuth.getInstance();
         final SignIn signIn = new SignIn();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference updateRef =  databaseReference.child("Quote").child("users");
 
-        updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshotfor : dataSnapshot.getChildren())
-                {
-                    if(dataSnapshotfor !=  null)
-                    {
-                        UserData userData= dataSnapshotfor.getValue(UserData.class);
-                        flag = true;
+            updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot dataSnapshotfor : dataSnapshot.getChildren()) {
+                        if (dataSnapshotfor != null) {
+                            UserData userData = dataSnapshotfor.getValue(UserData.class);
+                            System.out.println("--->Quote Intelligence" + userData.getUserViewedQuotes().size());
+                            flag = true;
 
 
+                        } else {
+                            signIn.CreateUser();
+                            flag = true;
+                        }
 
 
-                    }else {
-                        signIn.CreateUser();
-                        flag=true;
                     }
 
 
                 }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
+                }
+            });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            System.out.println("Flag--->" + flag);
 
-            }
-        });
-
-        System.out.println("Flag--->"+flag);
         return flag;
     }
 

@@ -297,10 +297,11 @@ public class SignIn extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            quoteIntelligence.UserGet();
+                               UserGet();
 
-                              Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                              startActivity(intent);
+
+
+
                             Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
 
@@ -363,6 +364,53 @@ public class SignIn extends AppCompatActivity {
 
 
 
+
+    }
+    public void UserGet(){
+        FirebaseAuth auth;
+        auth = FirebaseAuth.getInstance();
+        UserData.userViewedQuotes.clear();
+        final SignIn signIn = new SignIn();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference updateRef =  databaseReference.child("Quote").child("users");
+
+        updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotfor : dataSnapshot.getChildren()) {
+                    if (dataSnapshotfor != null) {
+                        UserData userData = dataSnapshotfor.getValue(UserData.class);
+                        System.out.println("--->Quote Intelligence signIn" + userData.getUserViewedQuotes().size());
+                       // flag = true;
+                        done();
+
+
+                    } else {
+                        signIn.CreateUser();
+                        done();
+                     //   flag = true;
+                    }
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        System.out.println("Flag--->" + flag);
+
+
+    }
+
+    public void done(){
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
 
     }
 
