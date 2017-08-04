@@ -24,12 +24,19 @@ public class QuoteIntelligence {
     static boolean flag=false;
 
 
-    public void LikesAdd(String tempKey, String tempCategory, final boolean heart)
+    public void LikesAdd(String tempKey, String tempCategory,boolean heart)
     {
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference updateRef =  databaseReference.child("Quote").child(tempCategory);
-        UserData.userLikedQuotes.add(tempKey);
+        if(UserData.userLikedQuotes.contains(tempKey) && !heart)
+        {
+            int index =UserData.userLikedQuotes.indexOf(tempKey);
+            UserData.userLikedQuotes.remove(index);
+        }else if(!UserData.userLikedQuotes.contains(tempKey)){
+            UserData.userLikedQuotes.add(tempKey);
+        }
+        flag=heart;
         updateRef.orderByChild("key").equalTo(tempKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -38,14 +45,14 @@ public class QuoteIntelligence {
                 for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
                      ) {
                     int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
-                    if(heart==true)
+                    if(flag==true)
                     {
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(++likes);
                     }else{
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(--likes);
                     }
 
-                    System.out.println("------>likessss------>"+likes);
+                    System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
                 }
 
             }
@@ -63,13 +70,14 @@ public class QuoteIntelligence {
         auth = FirebaseAuth.getInstance();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userRefLikes =  databaseReference.child("Quote").child("users");
-
+        System.out.println("------>EndUserLikeUpdate here------>");
         userRefLikes.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshotfor : dataSnapshot.getChildren())
                 {
                     dataSnapshotfor.child("userLikedQuotes").getRef().setValue(UserData.userLikedQuotes);
+                    System.out.println("------>EndUserLikeUpdate updater order------>");
                 }
             }
 

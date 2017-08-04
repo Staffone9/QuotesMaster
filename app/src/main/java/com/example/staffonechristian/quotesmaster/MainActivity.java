@@ -38,18 +38,23 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     int k;
-    int counter=0;
+    static int counter=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getList();
-
-        for(int i=0;i < mData.listOfCategory.size() && counter<8 ;i++)
+        quotesList = new ArrayList<>();
+        for(int i=0;i < mData.listOfCategory.size() ;i++)
         {
+            if(counter>7)
+            {
+
+                break;
+            }
             prepareQuotes(i);
-            counter++;
+            System.out.println("Counter bhailu"+counter);
 
         }
 
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         //Code by Anjali
         pBar = (ProgressBar)findViewById(R.id.progress_bar);
         pBar.setVisibility(View.VISIBLE);
-        quotesList = new ArrayList<>();
+
         adapter = new QuotesAdapter(this,quotesList,false);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -159,11 +164,13 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
                                 quotesList.add(mData);
+                                counter++;
                                 adapter.notifyDataSetChanged();
                                 UserData.userViewedQuotes.add(mData.getKey());
                             }
                         }else if(mData.getKey()!= null) {
                             quotesList.add(mData);
+                            counter++;
                             adapter.notifyDataSetChanged();
                             System.out.println("Key--------->"+mData.getKey());
                             UserData.userViewedQuotes.add(mData.getKey());
