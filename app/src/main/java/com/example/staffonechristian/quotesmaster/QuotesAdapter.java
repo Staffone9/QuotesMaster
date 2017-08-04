@@ -58,7 +58,6 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final QuoteData mData = quoteList.get(position);
-
         //SpannableString ss = new SpannableString(mData.getQuote());
         //ss.setSpan(new MyLeadingMarginSpan2(4, 3), 0, ss.length(), 0);
 
