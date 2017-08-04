@@ -97,6 +97,8 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 String temp = holder.likeUnlike.getTag().toString();
                 quoteIntelligence = new QuoteIntelligence();
 
+
+
                 if(temp.equals("unlike")){
                     flag=true;
                     holder.likeUnlike.setTag("like");
