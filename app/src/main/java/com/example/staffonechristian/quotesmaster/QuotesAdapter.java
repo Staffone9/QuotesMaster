@@ -82,6 +82,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("Copied Text: ",cpdText);
                 clipboardManager.setPrimaryClip(clipData);
+
                 //Toast.makeText(context,mywid+"",Toast.LENGTH_SHORT).show();
                 //Toast.makeText(context,"Copy text: "+cpdText,Toast.LENGTH_LONG).show();
             }
