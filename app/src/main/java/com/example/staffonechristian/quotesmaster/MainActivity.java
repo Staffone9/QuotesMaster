@@ -3,13 +3,19 @@ package com.example.staffonechristian.quotesmaster;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
+import android.view.Display;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -24,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,8 +92,17 @@ public class MainActivity extends AppCompatActivity {
         //Code by Anjali
         pBar = (ProgressBar)findViewById(R.id.progress_bar);
         pBar.setVisibility(View.VISIBLE);
-
-        adapter = new QuotesAdapter(this,quotesList,false);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size1 = new Point();
+        display.getSize(size1);
+        int width = size1.x;
+        int height = size1.y;
+        int toolHei = getToolBarHeight();
+        int stat = getStatusBarHeight();
+        int myheight = height - (toolHei+stat);
+        System.out.println("------------Main: "+height+"\nTool: "+toolHei+"\nStat: "+stat+"Total: "+myheight+"-----------");
+       // Toast.makeText(this,"Main: "+height+"\nTool: "+toolHei+"\nStat: "+stat+"Total: "+myheight,Toast.LENGTH_LONG).show();
+        adapter = new QuotesAdapter(this,quotesList,false,width,myheight);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -131,17 +148,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-
-
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
+    }
+
+    public int getToolBarHeight() {
+        int[] attrs = new int[] {R.attr.actionBarSize};
+        TypedArray ta = this.obtainStyledAttributes(attrs);
+        int toolBarHeight = ta.getDimensionPixelSize(0, -1);
+        ta.recycle();
+        return toolBarHeight;
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private void prepareQuotes(int j){

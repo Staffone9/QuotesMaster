@@ -21,12 +21,12 @@ public class QuoteIntelligence {
 
     String key;
     QuoteData quoteData;
+    int likes;
     static boolean flag=false;
 
-
-    public void LikesAdd(String tempKey, String tempCategory,boolean heart)
+    public void LikesAdd(String tempKey, String tempCategory,boolean heart, QuoteData myData)
     {
-
+        quoteData = myData;
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference updateRef =  databaseReference.child("Quote").child(tempCategory);
         if(UserData.userLikedQuotes.contains(tempKey) && !heart)
@@ -36,6 +36,7 @@ public class QuoteIntelligence {
         }else if(!UserData.userLikedQuotes.contains(tempKey)){
             UserData.userLikedQuotes.add(tempKey);
         }
+
         flag=heart;
         updateRef.orderByChild("key").equalTo(tempKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -44,15 +45,17 @@ public class QuoteIntelligence {
 
                 for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
                      ) {
-                    int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
+                    likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
+
                     if(flag==true)
                     {
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(++likes);
                     }else{
+                        //quoteData.setQuoteLikes(--likes);
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(--likes);
                     }
-
                     System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
+                    quoteData.setQuoteLikes(likes);
                 }
 
             }
@@ -62,9 +65,8 @@ public class QuoteIntelligence {
 
             }
         });
-
-
     }
+
     public static void EndUserLikeUpdate(){
         FirebaseAuth auth;
         auth = FirebaseAuth.getInstance();

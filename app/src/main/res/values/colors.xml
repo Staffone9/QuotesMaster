@@ -5,9 +5,10 @@
     <color name="colorAccent">#FF6E40</color>
 
     <color name="grey">#E0E0E0</color>
-    <color name="myc1">#D32F2F</color>
-    <color name="myc2">#1976D2</color>
-    <color name="myc3">#FFA000</color>
+    <color name="author">#EEEEEE</color>
+
+    <color name="myc1">#F06292</color>
+    <color name="myc2">#64B5F6</color>
 
     <color name="button_back">#FF6E40</color>
     <color name="button_ripple">#FFAB91</color>

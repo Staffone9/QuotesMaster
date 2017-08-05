@@ -4,35 +4,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/card_margin"
-    card_view:cardCornerRadius="@dimen/card_corner_radius"
-    card_view:cardBackgroundColor="@android:color/white">
+    android:layout_height="240dp"
+    card_view:cardCornerRadius="@dimen/card_corner_radius">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:weightSum="1"
         android:id="@+id/myLin1">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/myLin2">
+            android:layout_height="0dp"
+            android:layout_weight="0.95">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/william"
-                android:id="@+id/myImage"
-                android:layout_marginLeft="@dimen/some_spacing"
-                android:layout_marginTop="@dimen/some_spacing"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/bot"
+                android:scaleType="fitXY"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/myLin3">
 
                 <TextView
@@ -41,10 +38,11 @@
                     android:id="@+id/quoteTxtVw"
                     android:text="Quote"
                     android:textSize="@dimen/quote_text"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_vertical|start"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
                     android:layout_marginLeft="@dimen/some_spacing"
-                    android:layout_marginTop="@dimen/some_spacing"/>
+                    android:layout_marginTop="@dimen/some_spacing"
+                    android:layout_marginRight="@dimen/some_spacing"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -52,41 +50,81 @@
                     android:id="@+id/quoteAuthorTxtVw"
                     android:text="-Author"
                     android:textSize="@dimen/quote_author_text"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/white"
                     android:textStyle="italic"
                     android:gravity="center_vertical|start"
-                    android:layout_marginLeft="@dimen/some_spacing"
-                    android:layout_marginTop="@dimen/some_spacing"/>
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="@dimen/some_spacing"
+                    android:layout_marginBottom="6dp"/>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/myLin4">
+                </LinearLayout>
+        </FrameLayout>
 
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:id="@+id/like_unlike"
-                        android:src="@drawable/unlike"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_toLeftOf="@+id/copyIcon"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_weight="0.05"
+            android:id="@+id/myLin4">
 
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:id="@+id/copyIcon"
-                        android:src="@drawable/copy_doc"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_alignParentRight="true"/>
+            <ImageView
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:id="@+id/like_unlike"
+                android:src="@drawable/unlike"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical"/>
 
-                </RelativeLayout>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/like_numbers"
+                android:text="0"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/quote_author_text"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/like_text"
+                android:text="Likes"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/quote_author_text"
+                android:textColor="@android:color/black"/>
+
+            <ImageView
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:id="@+id/copyIcon"
+                android:src="@drawable/copy_doc"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/copy_text"
+                android:text="Copy Text"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="@dimen/quote_author_text"
+                android:textColor="@android:color/black"/>
+
         </LinearLayout>
-
-
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

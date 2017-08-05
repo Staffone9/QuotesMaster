@@ -5,29 +5,12 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-
 import java.util.List;
-import java.util.Objects;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -40,14 +23,16 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     private List<QuoteData> quoteList;
     private Context context;
     public boolean heartState=false;
+    public int height,width,lineCount;
+    public boolean hat = false;
     QuoteIntelligence quoteIntelligence;
-    //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-
-    public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState){
+    public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState, int mwid,int mhei){
         this.context = mContext;
         this.quoteList = mQuoteList;
         heartState = defaultState;
+        this.width = mwid;
+        this.height = mhei;
     }
 
     @Override
@@ -57,23 +42,45 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+        CardView.LayoutParams params = new CardView.LayoutParams(width-60,(height/2)-30);
+        params.setMargins(30,30,30,0);
+        holder.myCard.setLayoutParams(params);
+
         final QuoteData mData = quoteList.get(position);
-        //SpannableString ss = new SpannableString(mData.getQuote());
-        //ss.setSpan(new MyLeadingMarginSpan2(4, 3), 0, ss.length(), 0);
-
-
         holder.mQuote.setText(mData.getQuote());
+       /* holder.mQuote.post(new Runnable() {
+            @Override
+            public void run() {
+               lineCount = holder.mQuote.getLineCount();
+                if (lineCount > 5){
+                    hat = true;
+                }
+                else {
+                    hat = false;
+                }
+            }
+        });
+
+        if (hat==true){
+            CardView.LayoutParams params = new CardView.LayoutParams(width-60,(height-500));
+            params.setMargins(30,30,30,0);
+            holder.myCard.setLayoutParams(params);
+        }
+        else {*/
+
+        //}
+
+
         holder.mAuthor.setText(mData.getAuthor());
+        if (mData.getQuoteLikes() == 1){
+            holder.mLikes.setText(mData.getQuoteLikes()+" ");
+            holder.mLikeText.setText("Like"+" ");
+        }
+        else {
+            holder.mLikes.setText(mData.getQuoteLikes()+" ");
+            holder.mLikeText.setText("Likes");
+        }
 
-        //final int mywid = holder.hellyeah.getWidth();
-        //int myhei = holder.myCard.getHeight();
-
-        //Picasso.with(holder.back_image.getContext()).load(R.drawable.mine).resize(dp2px(1000),0).into(holder.back_image);
-       // if(position%2==0){
-       //     holder.myCard.setBackgroundResource(R.drawable.bird1);
-       //     holder.myCard.setAlpha((float) 0.2);
-       // }
-        //heartState = false;
         holder.myCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,9 +88,6 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("Copied Text: ",cpdText);
                 clipboardManager.setPrimaryClip(clipData);
-
-                //Toast.makeText(context,mywid+"",Toast.LENGTH_SHORT).show();
-                //Toast.makeText(context,"Copy text: "+cpdText,Toast.LENGTH_LONG).show();
             }
         });
 
@@ -91,33 +95,48 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 boolean flag;
-               if(holder.likeUnlike.getTag()==null){
-                   holder.likeUnlike.setTag("unlike");
-                };
-                String temp = holder.likeUnlike.getTag().toString();
                 quoteIntelligence = new QuoteIntelligence();
-
-
-
+                if(holder.likeUnlike.getTag()==null){
+                   holder.likeUnlike.setTag("unlike");
+                }
+                String temp = holder.likeUnlike.getTag().toString();
                 if(temp.equals("unlike")){
                     flag=true;
                     holder.likeUnlike.setTag("like");
-                    holder.likeUnlike.setImageResource(R.drawable.like);
-                    //mData.setQuoteLikes(mData.getQuoteLikes() + 1);
+                    //holder.likeUnlike.setImageResource(R.drawable.like);
                 }
                 else {
-
                     flag=false;
                     holder.likeUnlike.setTag("unlike");
-                    holder.likeUnlike.setImageResource(R.drawable.unlike);
-                    //mData.setQuoteLikes(mData.getQuoteLikes() - 1);
+                    //holder.likeUnlike.setImageResource(R.drawable.unlike);
                 }
+
                 System.out.println("---->image source"+String.valueOf(holder.likeUnlike.getTag()));
-                Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes() +"\nCategory: "+mData.getCategory(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes() +"\nCategory: "+mData.getCategory(),Toast.LENGTH_LONG).show();
                 System.out.println("---->mData"+mData.toString());
                 if(mData.getCategory() != null)
                 {
-                    quoteIntelligence.LikesAdd(mData.getKey(), mData.getCategory(),flag);
+                    quoteIntelligence.LikesAdd(mData.getKey(), mData.getCategory(),flag,mData);
+                    if (mData.getQuoteLikes() == 1){
+                        holder.mLikes.setText(mData.getQuoteLikes()+" ");
+                        holder.mLikeText.setText("Like"+" ");
+                        if(flag==true){
+                            holder.likeUnlike.setImageResource(R.drawable.like);
+                        }
+                        else {
+                            holder.likeUnlike.setImageResource(R.drawable.unlike);
+                        }
+                    }
+                    else {
+                        holder.mLikes.setText(mData.getQuoteLikes()+" ");
+                        holder.mLikeText.setText("Likes");
+                        if(flag==true){
+                            holder.likeUnlike.setImageResource(R.drawable.like);
+                        }
+                        else {
+                            holder.likeUnlike.setImageResource(R.drawable.unlike);
+                        }
+                    }
                 }
             }
         });
@@ -129,19 +148,12 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         return  new MyViewHolder(itemView);
     }
 
-    public int dp2px(int dp) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        display.getMetrics(displaymetrics);
-        return (int) (dp * displaymetrics.density + 0.5f);
-    }
-
-
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         protected CardView myCard;
         protected TextView mQuote;
         protected TextView mAuthor;
+        protected TextView mLikes;
+        protected TextView mLikeText;
         protected ImageView icon;
         protected ImageView myCopy;
         protected ImageView likeUnlike;
@@ -150,6 +162,8 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
             myCard = (CardView)itemView.findViewById(R.id.card_view);
             mQuote = (TextView)itemView.findViewById(R.id.quoteTxtVw);
             mAuthor = (TextView)itemView.findViewById(R.id.quoteAuthorTxtVw);
+            mLikes = (TextView)itemView.findViewById(R.id.like_numbers);
+            mLikeText = (TextView)itemView.findViewById(R.id.like_text);
             icon = (ImageView)itemView.findViewById(R.id.myImage);
             myCopy = (ImageView)itemView.findViewById(R.id.copyIcon);
             likeUnlike = (ImageView)itemView.findViewById(R.id.like_unlike);
