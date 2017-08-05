@@ -43,7 +43,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         CardView.LayoutParams params = new CardView.LayoutParams(width-60,(height/2)-30);
-        params.setMargins(30,30,30,0);
+        params.setMargins(30,15,30,15);
         holder.myCard.setLayoutParams(params);
 
         final QuoteData mData = quoteList.get(position);
