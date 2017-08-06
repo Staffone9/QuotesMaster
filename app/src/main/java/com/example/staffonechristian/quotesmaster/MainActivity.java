@@ -46,25 +46,20 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     int k;
+    static int size;
     static int counter=0;
+    static boolean initialFlag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getList();
+        initialFlag = false;
+
         quotesList = new ArrayList<>();
-        for(int i=0;i < mData.listOfCategory.size() ;i++)
-        {
-            if(counter>7)
-            {
-
-                break;
-            }
-            prepareQuotes(i);
-            System.out.println("Counter bhailu"+counter);
-
-        }
+        size = mData.listOfCategory.size()-1;
 
         k=0;
         System.out.println("--->Array ma value check"+UserData.userViewedQuotes.toString()+"---->Size"+UserData.userViewedQuotes.size());
@@ -82,13 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if(UserData.userViewedQuotes.contains("KpXFiAB6FNkJ2jhtnEf"))
-        {
-            System.out.println("-------Contain");
 
-        }else {
-            System.out.println("--------Do not Contain");
-        }
         //Code by Anjali
         pBar = (ProgressBar)findViewById(R.id.progress_bar);
         pBar.setVisibility(View.VISIBLE);
@@ -112,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseReference myRef = reference.child("Quote");
 
-
+        prepareQuotes(0);
         //adp.setData(this,quotesList);
         //recyclerView.setAdapter(adp);
         recyclerView.setAdapter(adapter);
@@ -121,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+              //  Toast.makeText(getApplicationContext(),"onScrollStateChanged"+newState,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -129,12 +119,35 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
+                int firstItem = layoutManager.findFirstVisibleItemPosition();
                 lastItem = layoutManager.findLastVisibleItemPosition();
+                QuoteData firstData = quotesList.get(firstItem);
+                QuoteData qData = quotesList.get(lastItem);
+
+                System.out.println("--------->Last visible Quote "+qData.getQuote());
+               // QuoteData mData = quoteList.get(position);
                // Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
-             //   System.out.println("------->P lastItem="+lastItem);
+                System.out.println("------->P lastItem="+lastItem + "total Item Count="+totalItemCount);
+
+                if(UserData.userViewedQuotes.size()>0) {
+                    if (!UserData.userViewedQuotes.contains(qData.getKey())) {
+
+                        UserData.userViewedQuotes.add(qData.getKey());
+
+
+                    }
+
+                    if(!UserData.userViewedQuotes.contains(firstData.getKey())){
+                        UserData.userViewedQuotes.add(firstData.getKey());
+
+                    }
+                }else {
+                    UserData.userViewedQuotes.add(qData.getKey());
+                }
             //    System.out.println("just check--->"+ lastItem+"k "+k);
-                if(lastItem <= quotesList.size()-1){
+                if(lastItem == quotesList.size()-1){
                     if(k<5){
+
                         prepareQuotes(++k);
                     }
                     if(k==5)
@@ -145,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     @Override
     protected void onStart() {
@@ -177,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
     private void prepareQuotes(int j){
         //Code by Staffone
 
+
             DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(j));
 
             quoteReference.orderByChild("priorityScore").addValueEventListener(new ValueEventListener() {
@@ -194,22 +210,26 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
                                 quotesList.add(mData);
-                                counter++;
+
+
+
+
+
                                 adapter.notifyDataSetChanged();
-                                UserData.userViewedQuotes.add(mData.getKey());
+
+
                             }
                         }else if(mData.getKey()!= null) {
                             quotesList.add(mData);
-                            counter++;
+
                             adapter.notifyDataSetChanged();
                             System.out.println("Key--------->"+mData.getKey());
-                            UserData.userViewedQuotes.add(mData.getKey());
+
+
 
                         }else {
                             System.out.println("aa else ni size--------->"+UserData.userViewedQuotes.size());
                         }
-
-
 
                         //adp.notifyDataSetChanged();
                        // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
@@ -224,8 +244,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+
+
+
 //        System.out.println("key "+UserData.userViewedQuotes.toString());
     }
+
 
     @Override
     protected void onPause() {
