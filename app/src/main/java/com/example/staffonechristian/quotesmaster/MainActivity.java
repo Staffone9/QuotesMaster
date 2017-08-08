@@ -45,18 +45,20 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    int k;
+    static int k;
     static int size;
     static int counter=0;
-    static boolean initialFlag;
-
+    static boolean flag=true,firstFlag=true,likeFlag=false,kill;
+    static String key;
+    public ArrayList<String> checkArray = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getList();
-        initialFlag = false;
+        quoteIntelligence = new QuoteIntelligence();
+
 
         quotesList = new ArrayList<>();
         size = mData.listOfCategory.size()-1;
@@ -101,11 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseReference myRef = reference.child("Quote");
 
-        prepareQuotes(0);
+
         //adp.setData(this,quotesList);
         //recyclerView.setAdapter(adp);
         recyclerView.setAdapter(adapter);
 
+
+        InitialTwoQuote();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -120,47 +124,59 @@ public class MainActivity extends AppCompatActivity {
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstItem = layoutManager.findFirstVisibleItemPosition();
+
                 lastItem = layoutManager.findLastVisibleItemPosition();
                 QuoteData firstData = quotesList.get(firstItem);
                 QuoteData qData = quotesList.get(lastItem);
-
                 System.out.println("--------->Last visible Quote "+qData.getQuote());
                // QuoteData mData = quoteList.get(position);
-               // Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
-                System.out.println("------->P lastItem="+lastItem + "total Item Count="+totalItemCount);
-
+              //  Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
+                System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size()+" quotesList.lastIndexOf(QuoteData.class)"+quotesList.lastIndexOf(QuoteData.class));
+                boolean loadMore =  firstItem + visibleItemCount >= totalItemCount-1;
                 if(UserData.userViewedQuotes.size()>0) {
                     if (!UserData.userViewedQuotes.contains(qData.getKey())) {
 
                         UserData.userViewedQuotes.add(qData.getKey());
-
+                        QuoteIntelligence.quoteViewAdd(qData.getCategory(),qData.getKey());
 
                     }
 
                     if(!UserData.userViewedQuotes.contains(firstData.getKey())){
                         UserData.userViewedQuotes.add(firstData.getKey());
+                        QuoteIntelligence.quoteViewAdd(firstData.getCategory(),firstData.getKey());
 
                     }
                 }else {
                     UserData.userViewedQuotes.add(qData.getKey());
+                    QuoteIntelligence.quoteViewAdd(qData.getCategory(),qData.getKey());
                 }
             //    System.out.println("just check--->"+ lastItem+"k "+k);
-                if(lastItem == quotesList.size()-1){
-                    if(k<5){
+                if(lastItem == quotesList.size()-1 && flag){
 
-                        prepareQuotes(++k);
-                    }
-                    if(k==5)
-                    {
-                        k=0;
-                    }
+                        prepareQuotes(k);
+                        flag=false;
+                    MainActivity.likeFlag=false;
+
                 }
             }
         });
     }
 
 
+    public void InitialTwoQuote(){
 
+        while (firstFlag)
+        {
+            prepareQuotes(k);
+            firstFlag=false;
+//            if(quotesList.size()>3)
+//            {
+
+//            }
+
+        }
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -189,60 +205,121 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    public  void refresh(){
+        adapter.notifyDataSetChanged();
+    }
+
     private void prepareQuotes(int j){
         //Code by Staffone
 
 
+            k++;
+            if(k==6)
+            {
+                k=0;
+            }
             DatabaseReference quoteReference = reference.child("Quote").child(mData.listOfCategory.get(j));
 
             quoteReference.orderByChild("priorityScore").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot individual : dataSnapshot.getChildren()) {
+
+                    adapter.notifyDataSetChanged();
+                    if (!likeFlag) {
+
+                        for (DataSnapshot individual : dataSnapshot.getChildren()) {
 //
-                        mData = new QuoteData();
-                        mData = individual.getValue(QuoteData.class);
+                            System.out.println("Main Datasnapshot--->"+dataSnapshot.getValue().toString());
+                            mData = new QuoteData();
+                            mData = individual.getValue(QuoteData.class);
 
-                        if(UserData.userViewedQuotes.size() > 0 )
-                        {
-
-                            if(!UserData.userViewedQuotes.contains(mData.getKey()))
+                            if(UserData.userViewedQuotes.size() > 0 )
                             {
-                                System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
-                                quotesList.add(mData);
+                                QuoteData tempData = new QuoteData();
+                                tempData.setQuote(mData.getQuote());
+                                if(!UserData.userViewedQuotes.contains(mData.getKey()))
+                                {
+                                    System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
+
+                                    if(!checkArray.contains(mData.getQuote()))
+                                    {
+                                        checkArray.add(mData.getQuote());
+                                        quotesList.add(mData);
+                                        flag=true;
+
+                                    }else if(quotesList.size()==0)
+                                    {
+                                        checkArray.add(mData.getQuote());
+                                        quotesList.add(mData);
+                                        flag=true;
+
+                                    }
+
+
+                                    counter++;
+
+
+                                    key=mData.getKey();
+                                    adapter.notifyDataSetChanged();
 
 
 
+                                }else{
+
+                                }
+                            }else if(mData.getKey()!= null) {
+                                if(quotesList.size()>0 && (!quotesList.contains(mData.getQuote())))
+                                {
+                                    checkArray.add(mData.getQuote());
+                                    quotesList.add(mData);
+                                    counter++;
+                                    adapter.notifyDataSetChanged();
+                                    System.out.println("Key--------->"+mData.getKey());
+                                    UserData.userViewedQuotes.add(mData.getKey());
+                                    key=mData.getKey();
+                                    flag=true;
 
 
+                                }else if(quotesList.size()==0) {
+                                    checkArray.add(mData.getQuote());
+                                    quotesList.add(mData);
+                                    adapter.notifyDataSetChanged();
+                                    System.out.println("Key--------->"+mData.getKey());
+                                    UserData.userViewedQuotes.add(mData.getKey());
+                                    QuoteIntelligence.quoteViewAdd(mData.getCategory(),mData.getKey());
+                                    flag=true;
+
+                                }
+                                counter++;
                                 adapter.notifyDataSetChanged();
 
 
+
+                            }else {
+                                System.out.println("aa else ni size--------->"+UserData.userViewedQuotes.size());
+                                firstFlag=true;
+                                break;
+
+
                             }
-                        }else if(mData.getKey()!= null) {
-                            quotesList.add(mData);
-
-                            adapter.notifyDataSetChanged();
-                            System.out.println("Key--------->"+mData.getKey());
-
-
-
-                        }else {
-                            System.out.println("aa else ni size--------->"+UserData.userViewedQuotes.size());
+                            //adp.notifyDataSetChanged();
+                            // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
                         }
 
-                        //adp.notifyDataSetChanged();
-                       // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
+
+
+                        recyclerView.setVisibility(View.VISIBLE);
+                        pBar.setVisibility(View.GONE);
+
+                    }
                     }
 
-                    recyclerView.setVisibility(View.VISIBLE);
-                    pBar.setVisibility(View.GONE);
-                }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
+
 
 
 

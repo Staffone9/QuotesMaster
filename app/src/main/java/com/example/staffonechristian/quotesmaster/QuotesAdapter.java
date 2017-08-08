@@ -45,7 +45,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         CardView.LayoutParams params = new CardView.LayoutParams(width-60,(height/2)-30);
         params.setMargins(30,15,30,15);
         holder.myCard.setLayoutParams(params);
-
+        UserData.lastPosition = position;
         final QuoteData mData = quoteList.get(position);
         holder.mQuote.setText(mData.getQuote());
        /* holder.mQuote.post(new Runnable() {
@@ -72,14 +72,10 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
 
 
         holder.mAuthor.setText(mData.getAuthor());
-        if (mData.getQuoteLikes() == 1){
+
             holder.mLikes.setText(mData.getQuoteLikes()+" ");
-            holder.mLikeText.setText("Like"+" ");
-        }
-        else {
-            holder.mLikes.setText(mData.getQuoteLikes()+" ");
-            holder.mLikeText.setText("Likes");
-        }
+            holder.mLikeText.setText("Likes"+" ");
+
 
         holder.myCopy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,26 +113,18 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
                 if(mData.getCategory() != null)
                 {
                     quoteIntelligence.LikesAdd(mData.getKey(), mData.getCategory(),flag,mData);
-                    if (mData.getQuoteLikes() == 1){
+
                         holder.mLikes.setText(mData.getQuoteLikes()+" ");
-                        holder.mLikeText.setText("Like"+" ");
+                        holder.mLikeText.setText("Likes"+" ");
                         if(flag==true){
                             holder.likeUnlike.setImageResource(R.drawable.like);
                         }
                         else {
                             holder.likeUnlike.setImageResource(R.drawable.unlike);
                         }
-                    }
-                    else {
-                        holder.mLikes.setText(mData.getQuoteLikes()+" ");
-                        holder.mLikeText.setText("Likes");
-                        if(flag==true){
-                            holder.likeUnlike.setImageResource(R.drawable.like);
-                        }
-                        else {
-                            holder.likeUnlike.setImageResource(R.drawable.unlike);
-                        }
-                    }
+
+
+
                 }
             }
         });

@@ -37,6 +37,7 @@ public class QuoteIntelligence {
             UserData.userLikedQuotes.add(tempKey);
         }
 
+
         flag=heart;
         updateRef.orderByChild("key").equalTo(tempKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -45,15 +46,28 @@ public class QuoteIntelligence {
 
                 for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
                      ) {
+                    int view = dataSnapShotOne.child("quoteViews").getValue(Integer.class);
+                    float prio = dataSnapShotOne.child("priorityScore").getValue(Float.class);
                     likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
 
                     if(flag==true)
                     {
-                        dataSnapShotOne.child("quoteLikes").getRef().setValue(++likes);
+                       MainActivity.likeFlag=true;
+                        likes=likes+1;
+                        dataSnapShotOne.child("quoteLikes").getRef().setValue(likes);
+
                     }else{
                         //quoteData.setQuoteLikes(--likes);
-                        dataSnapShotOne.child("quoteLikes").getRef().setValue(--likes);
+                        MainActivity.likeFlag=true;
+                        likes=likes-1;
+                        dataSnapShotOne.child("quoteLikes").getRef().setValue(likes);
+
                     }
+                    if(likes!=0)
+                    {
+                        prio = (view)/likes;
+                    }
+                    dataSnapShotOne.child("priorityScore").getRef().setValue(prio);
                     System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
                     quoteData.setQuoteLikes(likes);
                 }
@@ -88,6 +102,44 @@ public class QuoteIntelligence {
 
             }
         });
+    }
+
+    public static void quoteViewAdd(String category,String key){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference updateRef =  databaseReference.child("Quote").child(category);
+        updateRef.orderByChild("key").equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // System.out.println("------>DatasnapShot"+dataSnapshot.toString());
+
+                for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
+                        ) {
+
+                   int view = dataSnapShotOne.child("quoteViews").getValue(Integer.class);
+                    float prio = dataSnapShotOne.child("priorityScore").getValue(Float.class);
+                    int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
+                    if(likes!=0)
+                    {
+                        prio = (view+1)/likes;
+                    }
+
+                      //  MainActivity.likeFlag=true;
+                        dataSnapShotOne.child("quoteViews").getRef().setValue(++view);
+                    dataSnapShotOne.child("priorityScore").getRef().setValue(prio);
+                    System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
     }
 
     public static void UserViewsAdd(){

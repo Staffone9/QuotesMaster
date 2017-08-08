@@ -13,7 +13,7 @@ public class UserData {
     public static ArrayList<String> userViewedQuotes = new ArrayList<String>();
     public static ArrayList<String> userFavouriteAuthor = new ArrayList<String>();
     public static ArrayList<String> userFavoriteCategories = new ArrayList<String>();
-
+    public static int lastPosition;
     public UserData(String emailId){
         userEmailID = emailId;
 //        userLikedQuotes.add("empty");
