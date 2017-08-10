@@ -19,6 +19,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import static java.lang.Math.toIntExact;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     QuoteData mData;
     ProgressBar pBar;
     int lastItem=1;
+    static  int prepareQuotesJ;
     QuoteIntelligence quoteIntelligence;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth;
@@ -48,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
     static int k;
     static int size;
     static int counter=0;
-    static boolean flag=true,firstFlag=true,likeFlag=false,kill;
+    static boolean flag=true,firstFlag=true,likeFlag=false,kill=false,hashMapFlag=true;
     static String key;
+    static int three;
     public ArrayList<String> checkArray = new ArrayList<String>();
 
     @Override
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        InitialTwoQuote();
+        InitialTwoQuote(0);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -128,21 +131,23 @@ public class MainActivity extends AppCompatActivity {
                 lastItem = layoutManager.findLastVisibleItemPosition();
                 QuoteData firstData = quotesList.get(firstItem);
                 QuoteData qData = quotesList.get(lastItem);
-                System.out.println("--------->Last visible Quote "+qData.getQuote());
+             //   System.out.println("--------->Last visible Quote "+qData.getQuote());
                // QuoteData mData = quoteList.get(position);
               //  Toast.makeText(getApplicationContext(),"visibleItemCount "+visibleItemCount+" totalItemCount"+totalItemCount,Toast.LENGTH_SHORT).show();
-                System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size()+" quotesList.lastIndexOf(QuoteData.class)"+quotesList.lastIndexOf(QuoteData.class));
+            //    System.out.println("------->P lastItem="+lastItem+" quotesList.size()="+quotesList.size()+" quotesList.lastIndexOf(QuoteData.class)"+quotesList.lastIndexOf(QuoteData.class));
                 boolean loadMore =  firstItem + visibleItemCount >= totalItemCount-1;
                 if(UserData.userViewedQuotes.size()>0) {
                     if (!UserData.userViewedQuotes.contains(qData.getKey())) {
 
                         UserData.userViewedQuotes.add(qData.getKey());
+                        UserData.viewQuoteMap.put(qData.getCategory(),UserData.viewQuoteMap.get(qData.getCategory())+1);
                         QuoteIntelligence.quoteViewAdd(qData.getCategory(),qData.getKey());
 
                     }
 
                     if(!UserData.userViewedQuotes.contains(firstData.getKey())){
                         UserData.userViewedQuotes.add(firstData.getKey());
+                        UserData.viewQuoteMap.put(firstData.getCategory(),UserData.viewQuoteMap.get(firstData.getCategory())+1);
                         QuoteIntelligence.quoteViewAdd(firstData.getCategory(),firstData.getKey());
 
                     }
@@ -152,8 +157,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             //    System.out.println("just check--->"+ lastItem+"k "+k);
                 if(lastItem == quotesList.size()-1 && flag){
+                        k++;
+                        if(k >= mData.listOfCategory.size())
+                        {
+                            k=0;
+                        }
 
                         prepareQuotes(k);
+
                         flag=false;
                     MainActivity.likeFlag=false;
 
@@ -163,23 +174,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void InitialTwoQuote(){
+    public void InitialTwoQuote(int p){
 
-        while (firstFlag)
-        {
-            prepareQuotes(k);
-            firstFlag=false;
-//            if(quotesList.size()>3)
-//            {
-
-//            }
-
+        if(p>=QuoteData.listOfCategory.size() ){
+            p=0;
         }
+        prepareQuotes(p);
 
     }
     @Override
     protected void onStart() {
         super.onStart();
+        SignIn.jump=false;
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -211,10 +217,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareQuotes(int j){
         //Code by Staffone
+        three=0;
+        prepareQuotesJ = j;
 
-
-            k++;
-            if(k==6)
+            if(k==QuoteData.listOfCategory.size())
             {
                 k=0;
             }
@@ -223,96 +229,126 @@ public class MainActivity extends AppCompatActivity {
             quoteReference.orderByChild("priorityScore").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (three <= 3) {
 
-                    adapter.notifyDataSetChanged();
-                    if (!likeFlag) {
 
-                        for (DataSnapshot individual : dataSnapshot.getChildren()) {
-//
-                            System.out.println("Main Datasnapshot--->"+dataSnapshot.getValue().toString());
-                            mData = new QuoteData();
-                            mData = individual.getValue(QuoteData.class);
+                        int totalChild = Long.valueOf(dataSnapshot.getChildrenCount()).intValue();
+                        int totalInHashMap = UserData.viewQuoteMap.get(mData.listOfCategory.get(prepareQuotesJ));
+                        System.out.println("Datasnapshot children--->" + totalChild + "totalInHashMap " + totalInHashMap);
 
-                            if(UserData.userViewedQuotes.size() > 0 )
-                            {
-                                QuoteData tempData = new QuoteData();
-                                tempData.setQuote(mData.getQuote());
-                                if(!UserData.userViewedQuotes.contains(mData.getKey()))
-                                {
-                                    System.out.println("aa dofu ni size--------->"+UserData.userViewedQuotes.size());
+                        if (totalChild == totalInHashMap) {
+                            hashMapFlag = false;
+                            k++;
+                            flag = true;
+                            if (quotesList.size() < 3) {
+                                InitialTwoQuote(k);
+                            } else {
+                                if (k >= QuoteData.listOfCategory.size()) {
 
-                                    if(!checkArray.contains(mData.getQuote()))
-                                    {
-                                        checkArray.add(mData.getQuote());
-                                        quotesList.add(mData);
-                                        flag=true;
+                                    k = 0;
+                                }
+                                prepareQuotes(k);
+                            }
 
-                                    }else if(quotesList.size()==0)
-                                    {
-                                        checkArray.add(mData.getQuote());
-                                        quotesList.add(mData);
-                                        flag=true;
+                        } else {
+                            hashMapFlag = true;
+                        }
+                        adapter.notifyDataSetChanged();
+                        if (!likeFlag && hashMapFlag) {
+
+                            for (DataSnapshot individual : dataSnapshot.getChildren()) {
+                                mData = new QuoteData();
+                                mData = individual.getValue(QuoteData.class);
+                                System.out.println("Quote Category--------->" + mData.getCategory());
+                                if (three >= 3) {
+
+                                    System.out.println("three--------->" + three);
+                                    break;
+
+                                }
+                                if (UserData.userViewedQuotes.size() > 0) {
+                                    QuoteData tempData = new QuoteData();
+                                    tempData.setQuote(mData.getQuote());
+                                    if (!UserData.userViewedQuotes.contains(mData.getKey())) {
+                                        System.out.println("aa dofu ni size--------->" + UserData.userViewedQuotes.size());
+
+                                        if (!checkArray.contains(mData.getQuote())) {
+                                            checkArray.add(mData.getQuote());
+                                            quotesList.add(mData);
+                                            flag = true;
+                                            kill = true;
+                                            ++three;
+                                        } else if (quotesList.size() == 0) {
+                                            checkArray.add(mData.getQuote());
+                                            quotesList.add(mData);
+                                            flag = true;
+                                            kill = true;
+                                            ++three;
+
+                                        }
+
+
+                                        counter++;
+
+
+                                        key = mData.getKey();
+                                        adapter.notifyDataSetChanged();
+
+
+                                        recyclerView.setVisibility(View.VISIBLE);
+                                        pBar.setVisibility(View.GONE);
+                                    } else {
 
                                     }
+                                } else if (mData.getKey() != null) {
+                                    if (quotesList.size() > 0 && (!checkArray.contains(mData.getQuote()))) {
+                                        checkArray.add(mData.getQuote());
+                                        quotesList.add(mData);
+                                        counter++;
+                                        ++three;
+                                        adapter.notifyDataSetChanged();
+                                        System.out.println("Key--------->" + mData.getKey());
+                                        UserData.userViewedQuotes.add(mData.getKey());
+                                        key = mData.getKey();
+                                        flag = true;
+                                        kill = true;
 
 
+                                    } else if (quotesList.size() == 0) {
+                                        checkArray.add(mData.getQuote());
+                                        quotesList.add(mData);
+                                        ++three;
+                                        adapter.notifyDataSetChanged();
+                                        System.out.println("Key--------->" + mData.getKey());
+                                        UserData.userViewedQuotes.add(mData.getKey());
+                                        UserData.viewQuoteMap.put(mData.getCategory(), UserData.viewQuoteMap.get(mData.getCategory()) + 1);
+                                        QuoteIntelligence.quoteViewAdd(mData.getCategory(), mData.getKey());
+                                        flag = true;
+                                        kill = true;
+
+                                    }
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                    pBar.setVisibility(View.GONE);
                                     counter++;
-
-
-                                    key=mData.getKey();
                                     adapter.notifyDataSetChanged();
 
 
+                                } else {
+                                    System.out.println("aa else ni size--------->" + UserData.userViewedQuotes.size());
+                                    firstFlag = true;
 
-                                }else{
+                                    break;
+
 
                                 }
-                            }else if(mData.getKey()!= null) {
-                                if(quotesList.size()>0 && (!quotesList.contains(mData.getQuote())))
-                                {
-                                    checkArray.add(mData.getQuote());
-                                    quotesList.add(mData);
-                                    counter++;
-                                    adapter.notifyDataSetChanged();
-                                    System.out.println("Key--------->"+mData.getKey());
-                                    UserData.userViewedQuotes.add(mData.getKey());
-                                    key=mData.getKey();
-                                    flag=true;
-
-
-                                }else if(quotesList.size()==0) {
-                                    checkArray.add(mData.getQuote());
-                                    quotesList.add(mData);
-                                    adapter.notifyDataSetChanged();
-                                    System.out.println("Key--------->"+mData.getKey());
-                                    UserData.userViewedQuotes.add(mData.getKey());
-                                    QuoteIntelligence.quoteViewAdd(mData.getCategory(),mData.getKey());
-                                    flag=true;
-
-                                }
-                                counter++;
-                                adapter.notifyDataSetChanged();
-
-
-
-                            }else {
-                                System.out.println("aa else ni size--------->"+UserData.userViewedQuotes.size());
-                                firstFlag=true;
-                                break;
-
-
+                                //adp.notifyDataSetChanged();
+                                // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
                             }
-                            //adp.notifyDataSetChanged();
-                            // Toast.makeText(getApplicationContext(),"Quote"+quote,Toast.LENGTH_SHORT).show();
+
+
                         }
-
-
-
-                        recyclerView.setVisibility(View.VISIBLE);
-                        pBar.setVisibility(View.GONE);
-
                     }
-                    }
+                }
 
 
                 @Override
@@ -354,6 +390,26 @@ public class MainActivity extends AppCompatActivity {
         listOfCategory.add("Love");
         listOfCategory.add("Positive");
         mData.setListOfCategory(listOfCategory);
+        getViewedHashMap();
+
+
+    }
+
+    public void getViewedHashMap(){
+
+//        if(UserData.viewQuoteMap == null)
+//
+        if(UserData.viewQuoteMap.isEmpty()) {
+            for (int i = 0; i < QuoteData.listOfCategory.size(); i++) {
+                UserData.viewQuoteMap.put(QuoteData.listOfCategory.get(i), 0);
+            }
+            System.out.println("------>>>>>>>>List of Category>>>>" + UserData.viewQuoteMap.toString());
+        }
+//        }else {
+//
+//            System.out.println("------>>>>>>>> Not Working >>>>"+UserData.viewQuoteMap.toString());
+//        }
+
     }
 
 

@@ -65,7 +65,7 @@ public class QuoteIntelligence {
                     }
                     if(likes!=0)
                     {
-                        prio = (view)/likes;
+                        prio = (float) view/likes;
                     }
                     dataSnapShotOne.child("priorityScore").getRef().setValue(prio);
                     System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
@@ -118,13 +118,14 @@ public class QuoteIntelligence {
                    int view = dataSnapShotOne.child("quoteViews").getValue(Integer.class);
                     float prio = dataSnapShotOne.child("priorityScore").getValue(Float.class);
                     int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
+                    view=view+1;
                     if(likes!=0)
                     {
-                        prio = (view+1)/likes;
+                        prio = (float) view/likes;
                     }
 
                       //  MainActivity.likeFlag=true;
-                        dataSnapShotOne.child("quoteViews").getRef().setValue(++view);
+                        dataSnapShotOne.child("quoteViews").getRef().setValue(view);
                     dataSnapShotOne.child("priorityScore").getRef().setValue(prio);
                     System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
 
@@ -145,7 +146,7 @@ public class QuoteIntelligence {
     public static void UserViewsAdd(){
         FirebaseAuth auth;
         auth = FirebaseAuth.getInstance();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference updateRef =  databaseReference.child("Quote").child("users");
 
         updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -154,6 +155,7 @@ public class QuoteIntelligence {
                 for(DataSnapshot dataSnapshotfor : dataSnapshot.getChildren())
                 {
                    dataSnapshotfor.child("userViewedQuotes").getRef().setValue(UserData.userViewedQuotes);
+                    dataSnapshotfor.child("viewQuoteMap").getRef().setValue(UserData.viewQuoteMap);
                 }
             }
 
@@ -164,6 +166,7 @@ public class QuoteIntelligence {
         });
 
     }
+
 
 
 

@@ -56,7 +56,9 @@ public class SignIn extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static String TAG="Main_Activity";
     private FirebaseAuth.AuthStateListener mAuthListener;
-    boolean flag;
+    boolean flag=true;
+    static boolean jump=false;
+    boolean innerFlag;
     UserList userListVar;
 
     //Code by Anjali
@@ -73,6 +75,7 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Checking for first time launch - before calling setContentView()
         quoteIntelligence = new QuoteIntelligence();
+        innerFlag=true;
         prefManager = new PrefManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
@@ -254,6 +257,7 @@ public class SignIn extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         flag=true;
     }
 
@@ -297,12 +301,14 @@ public class SignIn extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            jump=true;
+                            Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
                                UserGet();
 
 
 
 
-                            Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -322,46 +328,19 @@ public class SignIn extends AppCompatActivity {
     public void CreateUser() {
 
 
-            DatabaseReference referenceWriteOne = FirebaseDatabase.getInstance().getReference();
-
-            referenceWriteOne.child("Quote").child("UserData").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String email = mAuth.getCurrentUser().getEmail();
-                    for (DataSnapshot  data: dataSnapshot.getChildren()) {
-                        System.out.println("----->data :"+data.toString());
-                        flag=true;
-//                    if(data.child(email).exists())
-//                    {
-//                        Toast.makeText(getApplicationContext(),"User Exist", Toast.LENGTH_SHORT).show();
-//                    }else{
-//                        Toast.makeText(getApplicationContext(),"User does not Exist", Toast.LENGTH_SHORT).show();
-//                    }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-
             if(flag){
                 DatabaseReference referenceWrite = FirebaseDatabase.getInstance().getReference();
-                String email = mAuth.getCurrentUser().getEmail();
-                String uid = mAuth.getCurrentUser().getUid();
+                FirebaseAuth auth;
+                auth = FirebaseAuth.getInstance();
+                String email = auth.getCurrentUser().getEmail();
+                String uid = auth.getCurrentUser().getUid();
                 DatabaseReference drWrite = referenceWrite.child("Quote").child("users").child(uid);
-                UserData userDataObject = new UserData(email);
-                drWrite.setValue(userDataObject);
+               drWrite.child("userEmailID").getRef().setValue(email);
+                jump=true;
 
             }else {
 
             }
-
-
 
 
 
@@ -373,21 +352,25 @@ public class SignIn extends AppCompatActivity {
         final SignIn signIn = new SignIn();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference updateRef =  databaseReference.child("Quote").child("users");
-
-        updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+        System.out.println("--->authemail="+auth.getCurrentUser().getEmail());
+        updateRef.orderByChild("userEmailID").equalTo(auth.getCurrentUser().getEmail()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshotfor : dataSnapshot.getChildren()) {
                     if (dataSnapshotfor != null) {
                         UserData userData = dataSnapshotfor.getValue(UserData.class);
-                        System.out.println("--->Quote Intelligence signIn" + userData.getUserViewedQuotes().size());
+                        System.out.println("--->Quote Intelligence signIn" + UserData.viewQuoteMap.toString()+" Size of viewed "+UserData.userViewedQuotes.size());
                        // flag = true;
-                        done();
+                        innerFlag=false;
+                        if(jump)
+                        {
+                            done();
+                        }
 
 
                     } else {
-                        signIn.CreateUser();
-                        done();
+
+
                      //   flag = true;
                     }
 
@@ -402,6 +385,11 @@ public class SignIn extends AppCompatActivity {
 
             }
         });
+        if(innerFlag){
+            CreateUser();
+
+        }
+
 
         System.out.println("Flag--->" + flag);
 

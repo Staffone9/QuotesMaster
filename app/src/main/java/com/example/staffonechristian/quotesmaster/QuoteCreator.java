@@ -128,7 +128,7 @@ public class QuoteCreator extends AppCompatActivity implements  AdapterView.OnIt
                     quoteData.setAuthor("-"+quoteAuthorText.getText().toString());
                     quoteData.setQuoteLikes(0);
                     quoteData.setQuoteViews(0);
-                    quoteData.setPriorityScore(0);
+                    quoteData.setPriorityScore(9);
                     quoteData.setCategory(categoriesString);
                     //change**************************************************************************************
                     quoteData.setKey(key);
