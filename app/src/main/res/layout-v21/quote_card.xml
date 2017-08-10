@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="0dp"
+    card_view:cardElevation="2dp"
     card_view:cardCornerRadius="@dimen/card_corner_radius">
 
     <LinearLayout
@@ -22,6 +23,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/back_img"
                 android:src="@drawable/bot"
                 android:scaleType="fitXY"/>
 
@@ -52,8 +54,8 @@
                     android:textSize="@dimen/quote_author_text"
                     android:textColor="@android:color/white"
                     android:textStyle="italic"
-                    android:gravity="center_vertical|start"
-                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical|end"
+                    android:layout_marginRight="20dp"
                     android:layout_marginTop="@dimen/some_spacing"
                     android:layout_marginBottom="6dp"/>
 
