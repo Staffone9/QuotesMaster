@@ -27,6 +27,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     public boolean heartState=false;
     public int height,width,lineCount;
     public CardView.LayoutParams params;
+    public String mCategory;
     QuoteIntelligence quoteIntelligence;
 
     public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState, int mwid,int mhei){
@@ -63,17 +64,85 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         holder.myCard.setLayoutParams(params);
 
         int posMod = position % 10;
-        switch (posMod){
+        mCategory = mData.getCategory();
+
+        if(mCategory.equals("Love")){
+            switch (posMod){
+                case 1:
+                    holder.myImage.setImageResource(R.drawable.love1);
+                    break;
+                case 2:
+                    holder.myImage.setImageResource(R.drawable.love2);
+                    break;
+                case 3:
+                    holder.myImage.setImageResource(R.drawable.love3);
+                    break;
+                case 4:
+                    holder.myImage.setImageResource(R.drawable.love4);
+                    break;
+                case 5:
+                    holder.myImage.setImageResource(R.drawable.love5);
+                    break;
+                default:
+                    holder.myImage.setImageResource(R.drawable.love1);
+                    break;
+            }
+        }
+        else if(mCategory.equals("Life")){
+            switch (posMod){
+                case 1:
+                    holder.myImage.setImageResource(R.drawable.life1);
+                    break;
+                case 2:
+                    holder.myImage.setImageResource(R.drawable.life2);
+                    break;
+                case 3:
+                    holder.myImage.setImageResource(R.drawable.life3);
+                    break;
+                default:
+                    holder.myImage.setImageResource(R.drawable.life1);
+                    break;
+            }
+        }
+        else if(mCategory.equals("Motivational")){
+            switch (posMod){
+                case 1:
+                    holder.myImage.setImageResource(R.drawable.mot1);
+                    break;
+                case 2:
+                    holder.myImage.setImageResource(R.drawable.mot2);
+                    break;
+                case 3:
+                    holder.myImage.setImageResource(R.drawable.mot3);
+                    break;
+                case 4:
+                    holder.myImage.setImageResource(R.drawable.mot4);
+                    break;
+                default:
+                    holder.myImage.setImageResource(R.drawable.mot1);
+                    break;
+            }
+        }
+        else {
+            holder.myImage.setImageResource(R.drawable.life1);
+        }
+        /*switch (posMod){
             case 0:
                 holder.myImage.setImageResource(R.drawable.bot);
                 break;
             case 1:
                 holder.myImage.setImageResource(R.drawable.bot2);
                 break;
+            case 2:
+                holder.myImage.setImageResource(R.drawable.bot4);
+                break;
+            case 3:
+                holder.myImage.setImageResource(R.drawable.bot5);
+                break;
             default:
                 holder.myImage.setImageResource(R.drawable.bot);
                 break;
-        }
+        }*/
 
         holder.mAuthor.setText(mData.getAuthor());
         if (mData.getQuoteLikes() == 1){
@@ -170,7 +239,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
             mLikes = (TextView)itemView.findViewById(R.id.like_numbers);
             mLikeText = (TextView)itemView.findViewById(R.id.like_text);
             myImage = (ImageView)itemView.findViewById(R.id.back_img);
-            icon = (ImageView)itemView.findViewById(R.id.myImage);
+            //icon = (ImageView)itemView.findViewById(R.id.myImage);
             myCopy = (ImageView)itemView.findViewById(R.id.copyIcon);
             likeUnlike = (ImageView)itemView.findViewById(R.id.like_unlike);
         }
