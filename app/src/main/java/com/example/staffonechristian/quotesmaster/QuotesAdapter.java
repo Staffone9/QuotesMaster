@@ -3,8 +3,6 @@ package com.example.staffonechristian.quotesmaster;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +23,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     private List<QuoteData> quoteList;
     private Context context;
     public boolean heartState=false;
-    public int height,width,lineCount;
+    public int height,width,lineCount,posMod,exec;
     public CardView.LayoutParams params;
     public String mCategory;
     QuoteIntelligence quoteIntelligence;
@@ -42,7 +40,6 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     public int getItemCount() {
         return quoteList.size();
     }
-
 
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
@@ -63,86 +60,11 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         params.setMargins(30,20,30,20);
         holder.myCard.setLayoutParams(params);
 
-        int posMod = position % 10;
+        posMod = position % 10;
         mCategory = mData.getCategory();
 
-        if(mCategory.equals("Love")){
-            switch (posMod){
-                case 1:
-                    holder.myImage.setImageResource(R.drawable.love1);
-                    break;
-                case 2:
-                    holder.myImage.setImageResource(R.drawable.love2);
-                    break;
-                case 3:
-                    holder.myImage.setImageResource(R.drawable.love3);
-                    break;
-                case 4:
-                    holder.myImage.setImageResource(R.drawable.love4);
-                    break;
-                case 5:
-                    holder.myImage.setImageResource(R.drawable.love5);
-                    break;
-                default:
-                    holder.myImage.setImageResource(R.drawable.love1);
-                    break;
-            }
-        }
-        else if(mCategory.equals("Life")){
-            switch (posMod){
-                case 1:
-                    holder.myImage.setImageResource(R.drawable.life1);
-                    break;
-                case 2:
-                    holder.myImage.setImageResource(R.drawable.life2);
-                    break;
-                case 3:
-                    holder.myImage.setImageResource(R.drawable.life3);
-                    break;
-                default:
-                    holder.myImage.setImageResource(R.drawable.life1);
-                    break;
-            }
-        }
-        else if(mCategory.equals("Motivational")){
-            switch (posMod){
-                case 1:
-                    holder.myImage.setImageResource(R.drawable.mot1);
-                    break;
-                case 2:
-                    holder.myImage.setImageResource(R.drawable.mot2);
-                    break;
-                case 3:
-                    holder.myImage.setImageResource(R.drawable.mot3);
-                    break;
-                case 4:
-                    holder.myImage.setImageResource(R.drawable.mot4);
-                    break;
-                default:
-                    holder.myImage.setImageResource(R.drawable.mot1);
-                    break;
-            }
-        }
-        else {
-            holder.myImage.setImageResource(R.drawable.life1);
-        }
-        /*switch (posMod){
-            case 0:
-                holder.myImage.setImageResource(R.drawable.bot);
-                break;
-            case 1:
-                holder.myImage.setImageResource(R.drawable.bot2);
-                break;
-            case 2:
-                holder.myImage.setImageResource(R.drawable.bot4);
-                break;
-            case 3:
-                holder.myImage.setImageResource(R.drawable.bot5);
-                break;
-            default:
-                holder.myImage.setImageResource(R.drawable.bot);
-                break;
-        }*/
+        exec = swatImag(posMod,mCategory);
+        holder.myImage.setImageResource(exec);
 
         holder.mAuthor.setText(mData.getAuthor());
         if (mData.getQuoteLikes() == 1){
@@ -243,5 +165,78 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
             myCopy = (ImageView)itemView.findViewById(R.id.copyIcon);
             likeUnlike = (ImageView)itemView.findViewById(R.id.like_unlike);
         }
+    }
+
+    public int swatImag(int pos, String catg){
+        switch (catg){
+            case "Friendship":{
+                switch (pos){
+                    case 0:
+                        return R.drawable.frnd0;
+                    case 1:
+                        return R.drawable.frnd1;
+                    case 2:
+                        return R.drawable.frnd2;
+                    default:
+                        return R.drawable.frnd0;
+                }
+            }
+
+            case "Love":{
+                switch (pos){
+                    case 0:
+                        return R.drawable.love0;
+                    case 1:
+                        return R.drawable.love1;
+                    case 2:
+                        return R.drawable.love2;
+                    case 3:
+                        return R.drawable.love3;
+                    case 4:
+                        return R.drawable.love4;
+                    case 5:
+                        return R.drawable.love5;
+                    default:
+                        return R.drawable.love0;
+                }
+            }
+
+            case "Motivational":{
+                switch (pos){
+                    case 0:
+                        return R.drawable.mot0;
+                    case 1:
+                        return R.drawable.mot1;
+                    case 2:
+                        return R.drawable.mot2;
+                    case 3:
+                        return R.drawable.mot3;
+                    case 4:
+                        return R.drawable.mot4;
+                    default:
+                        return R.drawable.mot0;
+                }
+            }
+
+            case "Life":{
+                switch (pos){
+                    case 0:
+                        return R.drawable.life0;
+                    case 1:
+                        return R.drawable.life1;
+                    case 2:
+                        return R.drawable.life2;
+                    case 3:
+                        return R.drawable.life3;
+                    default:
+                        return R.drawable.life0;
+                }
+            }
+
+            default:{
+                return R.drawable.life0;
+            }
+        }
+
     }
 }
