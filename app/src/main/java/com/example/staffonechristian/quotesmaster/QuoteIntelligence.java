@@ -24,7 +24,6 @@ public class QuoteIntelligence {
     int likes;
     static boolean flag = false;
     public static boolean myfg;
-    private int myImg;
 
     public int LikesAdd(String tempKey, String tempCategory, QuoteData myData)
     {
@@ -42,7 +41,6 @@ public class QuoteIntelligence {
             flag = true;
             myfg = true;
         }
-
 
         //flag=heart;
         updateRef.orderByChild("key").equalTo(tempKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,16 +90,6 @@ public class QuoteIntelligence {
         else{
             return R.drawable.unlike;
         }
-    }
-
-    public int getMyImg(){
-        if (flag=true){
-            return R.drawable.like;
-        }
-        else {
-            return R.drawable.unlike;
-        }
-
     }
 
     public static void EndUserLikeUpdate(){

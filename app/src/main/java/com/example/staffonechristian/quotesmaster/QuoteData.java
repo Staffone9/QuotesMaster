@@ -107,12 +107,4 @@ public class QuoteData {
         this.category = categories;
     }
 
-    public int getMyImg(){
-        if(clicked == true){
-            return R.drawable.like;
-        }
-        else {
-            return R.drawable.unlike;
-        }
-    }
 }
