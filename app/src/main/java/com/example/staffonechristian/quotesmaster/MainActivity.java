@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         int myheight = height - (toolHei+stat);
         System.out.println("------------Main: "+height+"\nTool: "+toolHei+"\nStat: "+stat+"Total: "+myheight+"-----------");
        // Toast.makeText(this,"Main: "+height+"\nTool: "+toolHei+"\nStat: "+stat+"Total: "+myheight,Toast.LENGTH_LONG).show();
-        adapter = new QuotesAdapter(this,quotesList,false,width,myheight);
+        adapter = new QuotesAdapter(this,quotesList,width,myheight);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);

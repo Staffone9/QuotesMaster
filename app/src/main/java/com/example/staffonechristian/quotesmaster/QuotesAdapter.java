@@ -24,14 +24,15 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
     private Context context;
     public boolean heartState=false;
     public int height,width,lineCount,posMod,exec;
-    public CardView.LayoutParams params;
+    public static int xy;
     public String mCategory;
     QuoteIntelligence quoteIntelligence;
+    boolean flag;
 
-    public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, boolean defaultState, int mwid,int mhei){
+    public QuotesAdapter(Context mContext, List<QuoteData> mQuoteList, int mwid,int mhei){
         this.context = mContext;
         this.quoteList = mQuoteList;
-        heartState = defaultState;
+        //heartState = defaultState;
         this.width = mwid;
         this.height = mhei;
     }
@@ -41,28 +42,24 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         return quoteList.size();
     }
 
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         UserData.lastPosition = position;
         final QuoteData mData = quoteList.get(position);
         holder.mQuote.setText(mData.getQuote());
 
+        CardView.LayoutParams myParams;
         lineCount = holder.mQuote.getLineCount();
-        System.out.println("LC----------------->>>>>>>>>>>>>>>>>"+lineCount);
-        if(lineCount > 4){
-            params = new CardView.LayoutParams(width-60,height-800);
-            //params = new CardView.LayoutParams(width-60, holder.mQuote.getLineHeight()+holder.mAuthor.getLineHeight()+40);
-            //System.out.println("++++++++++++++++++"+holder.mQuote.getLineHeight()+"++++++++++++++++++++++");
-        }
-        else {
-            params = new CardView.LayoutParams(width-60,(height/2)-30);
-        }
-        params.setMargins(30,20,30,20);
-        holder.myCard.setLayoutParams(params);
+        myParams = getCardParams(lineCount);
+        holder.myCard.setLayoutParams(myParams);
 
         posMod = position % 10;
         mCategory = mData.getCategory();
-
         exec = swatImag(posMod,mCategory);
         holder.myImage.setImageResource(exec);
 
@@ -89,50 +86,14 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         holder.likeUnlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean flag;
                 quoteIntelligence = new QuoteIntelligence();
-                if(holder.likeUnlike.getTag()==null){
-                   holder.likeUnlike.setTag("unlike");
-                }
-                String temp = holder.likeUnlike.getTag().toString();
-                if(temp.equals("unlike")){
-                    flag=true;
-                    holder.likeUnlike.setTag("like");
-                    //holder.likeUnlike.setImageResource(R.drawable.like);
-                }
-                else {
-                    flag=false;
-                    holder.likeUnlike.setTag("unlike");
-                    //holder.likeUnlike.setImageResource(R.drawable.unlike);
-                }
 
-                System.out.println("---->image source"+String.valueOf(holder.likeUnlike.getTag()));
-                //Toast.makeText(context,"Key: "+mData.getKey()+"\nLikes: "+mData.getQuoteLikes() +"\nCategory: "+mData.getCategory(),Toast.LENGTH_LONG).show();
-                System.out.println("---->mData"+mData.toString());
                 if(mData.getCategory() != null)
                 {
-                    quoteIntelligence.LikesAdd(mData.getKey(), mData.getCategory(),flag,mData);
-                    if (mData.getQuoteLikes() == 1){
-                        holder.mLikes.setText(mData.getQuoteLikes()+" ");
-                        holder.mLikeText.setText("Like"+" ");
-                        if(flag==true){
-                            holder.likeUnlike.setImageResource(R.drawable.like);
-                        }
-                        else {
-                            holder.likeUnlike.setImageResource(R.drawable.unlike);
-                        }
-                    }
-                    else {
-                        holder.mLikes.setText(mData.getQuoteLikes()+" ");
-                        holder.mLikeText.setText("Likes");
-                        if(flag==true){
-                            holder.likeUnlike.setImageResource(R.drawable.like);
-                        }
-                        else {
-                            holder.likeUnlike.setImageResource(R.drawable.unlike);
-                        }
-                    }
+                   xy  = quoteIntelligence.LikesAdd(mData.getKey(), mData.getCategory(),mData);
                 }
+                holder.likeUnlike.setImageResource(xy);
+                System.out.println(xy+")))))))))))))))))))))))))))))))))))))))))))))))))))))))");
             }
         });
     }
@@ -150,7 +111,7 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
         protected TextView mLikes;
         protected TextView mLikeText;
         protected ImageView myImage;
-        protected ImageView icon;
+        //protected ImageView icon;
         protected ImageView myCopy;
         protected ImageView likeUnlike;
         public MyViewHolder(View itemView) {
@@ -238,5 +199,17 @@ public class QuotesAdapter extends RecyclerView.Adapter<QuotesAdapter.MyViewHold
             }
         }
 
+    }
+
+    public CardView.LayoutParams getCardParams(int lineCount){
+        CardView.LayoutParams params;
+        if(lineCount > 4){
+            params = new CardView.LayoutParams(width-60,height-800);
+        }
+        else {
+            params = new CardView.LayoutParams(width-60,(height/2)-30);
+        }
+        params.setMargins(30,20,30,20);
+        return params;
     }
 }

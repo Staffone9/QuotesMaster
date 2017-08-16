@@ -22,23 +22,29 @@ public class QuoteIntelligence {
     String key;
     QuoteData quoteData;
     int likes;
-    static boolean flag=false;
+    static boolean flag = false;
+    public static boolean myfg;
+    private int myImg;
 
-    public void LikesAdd(String tempKey, String tempCategory,boolean heart, QuoteData myData)
+    public int LikesAdd(String tempKey, String tempCategory, QuoteData myData)
     {
         quoteData = myData;
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference updateRef =  databaseReference.child("Quote").child(tempCategory);
-        if(UserData.userLikedQuotes.contains(tempKey) && !heart)
+        if(UserData.userLikedQuotes.contains(tempKey))
         {
             int index =UserData.userLikedQuotes.indexOf(tempKey);
             UserData.userLikedQuotes.remove(index);
+            flag = false;
+            myfg = false;
         }else if(!UserData.userLikedQuotes.contains(tempKey)){
             UserData.userLikedQuotes.add(tempKey);
+            flag = true;
+            myfg = true;
         }
 
 
-        flag=heart;
+        //flag=heart;
         updateRef.orderByChild("key").equalTo(tempKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -52,16 +58,16 @@ public class QuoteIntelligence {
 
                     if(flag==true)
                     {
-                       MainActivity.likeFlag=true;
+                        MainActivity.likeFlag=true;
                         likes=likes+1;
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(likes);
-
+                        //myImg = R.drawable.like;
                     }else{
                         //quoteData.setQuoteLikes(--likes);
                         MainActivity.likeFlag=true;
                         likes=likes-1;
                         dataSnapShotOne.child("quoteLikes").getRef().setValue(likes);
-
+                        //myImg = R.drawable.unlike;
                     }
                     if(likes!=0)
                     {
@@ -79,6 +85,23 @@ public class QuoteIntelligence {
 
             }
         });
+
+        if (myfg == true){
+            return R.drawable.like;
+        }
+        else{
+            return R.drawable.unlike;
+        }
+    }
+
+    public int getMyImg(){
+        if (flag=true){
+            return R.drawable.like;
+        }
+        else {
+            return R.drawable.unlike;
+        }
+
     }
 
     public static void EndUserLikeUpdate(){
@@ -112,9 +135,7 @@ public class QuoteIntelligence {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // System.out.println("------>DatasnapShot"+dataSnapshot.toString());
 
-                for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()
-                        ) {
-
+                for (DataSnapshot dataSnapShotOne:dataSnapshot.getChildren()) {
                    int view = dataSnapShotOne.child("quoteViews").getValue(Integer.class);
                     float prio = dataSnapShotOne.child("priorityScore").getValue(Float.class);
                     int likes = dataSnapShotOne.child("quoteLikes").getValue(Integer.class);
@@ -125,7 +146,7 @@ public class QuoteIntelligence {
                     }
 
                       //  MainActivity.likeFlag=true;
-                        dataSnapShotOne.child("quoteViews").getRef().setValue(view);
+                    dataSnapShotOne.child("quoteViews").getRef().setValue(view);
                     dataSnapShotOne.child("priorityScore").getRef().setValue(prio);
                     System.out.println("------>User liked quotes------>"+UserData.userLikedQuotes.toString());
 

@@ -1,5 +1,7 @@
 package com.example.staffonechristian.quotesmaster;
 
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 
 /**
@@ -15,6 +17,7 @@ public class QuoteData {
     private int quoteViews;
     private float priorityScore;
     private String key;
+    public boolean clicked = false;
 
     @Override
     public String toString() {
@@ -38,6 +41,7 @@ public class QuoteData {
         this.author = mAuthor;
         this.key = mKey;
         this.quoteLikes = mQuoteLikes;
+        this.clicked = false;
     }
     static ArrayList<String> listOfCategory = new ArrayList<String>();
 
@@ -101,5 +105,14 @@ public class QuoteData {
 
     public void setCategory(String categories) {
         this.category = categories;
+    }
+
+    public int getMyImg(){
+        if(clicked == true){
+            return R.drawable.like;
+        }
+        else {
+            return R.drawable.unlike;
+        }
     }
 }
